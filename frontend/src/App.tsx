@@ -42,7 +42,9 @@ export default function App() {
   // Image paths
   const claireDefault = '/assets/claire_default.png';
   const claireSerious = '/assets/claire_serious.png';
+  const claireAngry = '/assets/claire_angry.png';
   const karenDefault = '/assets/karen_default.png';
+  const karenSerious = '/assets/karen_serious.png';
   const karenAngry = '/assets/karen_angry.png';
   const debateBg = '/assets/debate_bg.png';
 
@@ -416,15 +418,15 @@ export default function App() {
     }
   }, [bufferState.canPlay, screen, currentIndex]);
 
-  // Audio Playback effect
+  // Audio Playback & Buffering controller
   useEffect(() => {
     if (screen !== 'adv' || currentIndex === -1) return;
 
     const turn = turns[currentIndex];
     if (!turn) return;
 
-    if (turn.status !== 'ready') {
-      // Buffer underflow! Stop audio and wait
+    // 1. Buffer underflow: pause and show buffer overlay if not ready yet
+    if (turn.status === 'pending' || turn.status === 'loading') {
       setIsBuffering(true);
       if (audioRef.current) {
         audioRef.current.pause();
@@ -432,9 +434,10 @@ export default function App() {
       return;
     }
 
+    // 2. Buffer restored: clear buffering state
     setIsBuffering(false);
 
-    // If audio is already created and current source is same, just control playback
+    // 3. Playback control for same audio source
     if (audioRef.current && audioRef.current.src === turn.audioUrl) {
       if (isPlaying) {
         audioRef.current.play().catch(console.error);
@@ -444,7 +447,7 @@ export default function App() {
       return;
     }
 
-    // Initialize new audio element
+    // 4. Initialize and play new audio source
     if (audioRef.current) {
       audioRef.current.pause();
     }
@@ -452,21 +455,20 @@ export default function App() {
     const audio = new Audio(turn.audioUrl!);
     audioRef.current = audio;
 
-    // Set playing state in turns
+    // Set playing state
     setTurns((prev) => {
       const updated = [...prev];
-      // Mark previous playing as played
       updated.forEach((t, i) => {
         if (t.status === 'playing') updated[i].status = 'played';
       });
-      updated[currentIndex].status = 'playing';
+      if (updated[currentIndex]) updated[currentIndex].status = 'playing';
       return updated;
     });
 
     audio.addEventListener('ended', () => {
       setTurns((prev) => {
         const updated = [...prev];
-        updated[currentIndex].status = 'played';
+        if (updated[currentIndex]) updated[currentIndex].status = 'played';
         return updated;
       });
 
@@ -488,27 +490,7 @@ export default function App() {
       audio.pause();
     };
 
-  }, [currentIndex, isPlaying, screen]);
-
-  // Watch if buffering turn becomes ready, and resume
-  useEffect(() => {
-    if (isBuffering && currentIndex !== -1) {
-      const turn = turns[currentIndex];
-      if (turn && turn.status === 'ready') {
-        setIsBuffering(false);
-        if (isPlaying && audioRef.current) {
-          audioRef.current.src = turn.audioUrl!;
-          // Mark status
-          setTurns((prev) => {
-            const updated = [...prev];
-            updated[currentIndex].status = 'playing';
-            return updated;
-          });
-          audioRef.current.play().catch(console.error);
-        }
-      }
-    }
-  }, [turns, isBuffering, currentIndex, isPlaying]);
+  }, [currentIndex, isPlaying, screen, turns]);
 
   const handlePlayPause = () => {
     if (currentIndex === -1) {
@@ -590,11 +572,19 @@ export default function App() {
 
   // Determine images based on speaker & emotion
   const getClaireImg = () => {
-    return currentEmotion === 'serious' && activeSpeaker === 'Speaker1' ? claireSerious : claireDefault;
+    if (activeSpeaker === 'Speaker1') {
+      if (currentEmotion === 'serious') return claireSerious;
+      if (currentEmotion === 'angry') return claireAngry;
+    }
+    return claireDefault;
   };
 
   const getKarenImg = () => {
-    return currentEmotion === 'angry' && activeSpeaker === 'Speaker2' ? karenAngry : karenDefault;
+    if (activeSpeaker === 'Speaker2') {
+      if (currentEmotion === 'serious') return karenSerious;
+      if (currentEmotion === 'angry') return karenAngry;
+    }
+    return karenDefault;
   };
 
   return (
@@ -626,14 +616,23 @@ export default function App() {
           </header>
           
           <form className="setup-form" onSubmit={handleStartDebate}>
-            <div className="character-preview-grid">
-              <div className="character-card claire">
-                <div className="card-title">🛡️ クレア</div>
-                <div className="card-desc">Speaker 1: 論理的・データ重視・丁寧な口調。客観的なファクトと数字を突きつける知的な討論者。</div>
+            <div className="setup-vs-banner">
+              <div className="vs-character claire">
+                <img className="vs-avatar" src={claireDefault} alt="Claire" />
+                <div className="vs-info-overlay">
+                  <div className="vs-name">🛡️ クレア</div>
+                  <div className="vs-role">Speaker 1: 論理的JK (データ重視)</div>
+                </div>
               </div>
-              <div className="character-card karen">
-                <div className="card-title">🔥 カレン</div>
-                <div className="card-desc">Speaker 2: 感情的・現場の代弁者。実体験や人間味、情熱を持って実情を訴えかける討論者。</div>
+              <div className="vs-divider-badge">
+                <span className="vs-text">VS</span>
+              </div>
+              <div className="vs-character karen">
+                <img className="vs-avatar" src={karenDefault} alt="Karen" />
+                <div className="vs-info-overlay">
+                  <div className="vs-name">🔥 カレン</div>
+                  <div className="vs-role">Speaker 2: ギャル風JK (現場主義)</div>
+                </div>
               </div>
             </div>
 

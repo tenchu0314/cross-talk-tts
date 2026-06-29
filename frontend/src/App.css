@@ -52,6 +52,7 @@ body {
   font-size: 3rem;
   background: linear-gradient(135deg, #ffffff 30%, #a5b4fc 100%);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
   margin-bottom: 0.5rem;
   letter-spacing: -0.05em;
@@ -119,7 +120,7 @@ body {
 /* --- Screen: Setup Input --- */
 .setup-screen {
   width: 90%;
-  max-width: 600px;
+  max-width: 850px; /* Expand to give more horizontal breathing room */
   background: var(--bg-card);
   border: 1px solid var(--border-color);
   border-radius: 24px;
@@ -199,39 +200,136 @@ body {
   margin-bottom: 0.5rem;
 }
 
-.character-card {
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: 16px;
-  padding: 1.2rem;
+.setup-vs-banner {
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+  height: 240px; /* Taller height */
+  background: rgba(10, 12, 18, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  overflow: hidden;
+  position: relative;
+  margin-bottom: 2rem;
+  box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.9), 0 15px 35px rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(10px);
+}
+
+.vs-character {
+  flex: 1;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; /* Align to top to keep faces in frame */
+  overflow: hidden;
+  height: 100%;
+}
+
+.vs-character.claire {
+  background: linear-gradient(90deg, rgba(30, 58, 138, 0.25) 0%, rgba(10, 12, 18, 0) 100%);
+  border-right: 1px dashed rgba(255, 255, 255, 0.06);
+}
+
+.vs-character.karen {
+  background: linear-gradient(270deg, rgba(127, 29, 29, 0.25) 0%, rgba(10, 12, 18, 0) 100%);
+  border-left: 1px dashed rgba(255, 255, 255, 0.06);
+}
+
+.vs-avatar {
+  height: 185%; /* Focus heavily on head/shoulders */
+  width: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.6)) brightness(0.9);
+  position: absolute;
+  top: -10px; /* Position from top to prevent face cutoff */
+  transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.vs-character:hover .vs-avatar {
+  filter: drop-shadow(0 15px 25px rgba(88, 101, 242, 0.35)) brightness(1.05);
+  transform: scale(1.04) translateY(2px);
+}
+
+.vs-character.claire .vs-avatar {
+  left: 5%; /* Align closely to edge */
+}
+
+.vs-character.karen .vs-avatar {
+  right: 5%;
+  transform: scaleX(-1); /* Face Claire */
+}
+
+.vs-character.karen:hover .vs-avatar {
+  transform: scale(-1.04, 1.04) translateY(2px);
+}
+
+.vs-info-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 1rem 1.5rem;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(10, 12, 18, 0.95) 80%);
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
+  z-index: 2;
+  pointer-events: none;
 }
 
-.character-card.claire {
-  border-left: 3px solid var(--claire-color);
+.vs-character.claire .vs-info-overlay {
+  align-items: flex-start;
+  padding-left: 30%; /* Shift text rightwards so it doesn't overlap Claire's sprite */
 }
 
-.character-card.karen {
-  border-left: 3px solid var(--karen-color);
+.vs-character.karen .vs-info-overlay {
+  align-items: flex-end;
+  padding-right: 30%; /* Shift text leftwards so it doesn't overlap Karen's sprite */
 }
 
-.card-title {
-  font-weight: 700;
-  font-size: 1.1rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
+.vs-name {
+  font-family: var(--font-title);
+  font-weight: 800;
+  font-size: 1.2rem;
+  letter-spacing: 0.02em;
 }
 
-.claire .card-title { color: var(--claire-color); }
-.karen .card-title { color: var(--karen-color); }
+.vs-character.claire .vs-name { color: var(--claire-color); }
+.vs-character.karen .vs-name { color: var(--karen-color); }
 
-.card-desc {
-  font-size: 0.85rem;
+.vs-role {
+  font-size: 0.8rem;
   color: var(--text-muted);
-  line-height: 1.4;
+  font-weight: 500;
+  margin-top: 0.1rem;
+}
+
+.vs-divider-badge {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #11141a;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 3;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.9);
+}
+
+.vs-text {
+  font-family: var(--font-title);
+  font-weight: 900;
+  font-size: 1.1rem;
+  font-style: italic;
+  background: linear-gradient(135deg, #f43f5e 0%, #e11d48 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 10px rgba(225, 29, 72, 0.5);
 }
 
 /* --- Screen: Loading --- */
@@ -383,33 +481,35 @@ body {
 /* Character Presentation Area */
 .characters-stage {
   position: absolute;
-  bottom: 120px; /* Shift above the text window */
+  bottom: 0;
   left: 0;
   width: 100%;
-  height: calc(100vh - 240px);
+  height: 100vh;
   display: flex;
   justify-content: space-between;
-  padding: 0 10%;
+  padding: 0 8% 0 8%;
   align-items: flex-end;
   z-index: 2;
   pointer-events: none;
 }
 
 .character-sprite-container {
-  width: 40%;
-  height: 85%;
+  width: 35%; /* Slimmer container to fit tall aspect ratio */
+  height: 100%;
   display: flex;
   justify-content: center;
   align-items: flex-end;
   transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
   position: relative;
+  margin-bottom: 0; /* Keep baseline attached to bottom */
 }
 
 .character-sprite {
   max-width: 100%;
-  max-height: 100%;
+  height: 92vh; /* Scale sprite close to top of screen */
   object-fit: contain;
-  filter: drop-shadow(0 15px 30px rgba(0, 0, 0, 0.6)) brightness(0.6) grayscale(20%);
+  object-position: bottom; /* Keep base anchored at bottom */
+  filter: drop-shadow(0 15px 35px rgba(0, 0, 0, 0.6)) brightness(0.65) grayscale(15%);
   transform: scale(0.9);
   transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
   will-change: transform, filter;
@@ -421,8 +521,8 @@ body {
 }
 
 .character-sprite-container.active .character-sprite {
-  filter: drop-shadow(0 20px 45px rgba(88, 101, 242, 0.35)) brightness(1.05) grayscale(0%);
-  transform: scale(1.03) translateY(-10px);
+  filter: drop-shadow(0 20px 50px rgba(88, 101, 242, 0.4)) brightness(1.05) grayscale(0%);
+  transform: scale(1.04) translateY(-15px); /* Lift and scale up active character significantly */
 }
 
 .character-sprite-container.inactive {
@@ -430,8 +530,8 @@ body {
 }
 
 .character-sprite-container.inactive .character-sprite {
-  filter: drop-shadow(0 10px 20px rgba(0,0,0,0.7)) brightness(0.45) grayscale(40%);
-  transform: scale(0.88);
+  filter: drop-shadow(0 10px 20px rgba(0,0,0,0.8)) brightness(0.45) grayscale(35%);
+  transform: scale(0.88) translateY(0);
 }
 
 /* Placeholder box when image fails or loads */
@@ -472,23 +572,28 @@ body {
 
 /* Dialogue Text Box */
 .dialogue-window-container {
-  width: 90%;
-  max-width: 1000px;
-  margin: 0 auto 30px auto;
+  width: 100%;
+  max-width: none;
+  margin: 0;
   z-index: 5;
-  position: relative;
+  position: absolute;
+  bottom: 0;
+  left: 0;
   animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .dialogue-box {
-  background: rgba(12, 15, 22, 0.88);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 20px;
-  padding: 2rem;
-  min-height: 180px;
+  background: rgba(9, 11, 16, 0.94); /* Higher opacity to block visibility of cut-off character sprites */
+  border-top: 1px solid rgba(255, 255, 255, 0.12); /* Subtle glowing top border */
+  border-left: none;
+  border-right: none;
+  border-bottom: none;
+  border-radius: 24px 24px 0 0; /* Rounded top corners only */
+  padding: 2.2rem 8% 1.8rem 8%;
+  min-height: 230px;
   position: relative;
-  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.7);
-  backdrop-filter: blur(20px);
+  box-shadow: 0 -15px 40px rgba(0, 0, 0, 0.85); /* Casting shadow upward */
+  backdrop-filter: blur(25px);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -496,14 +601,14 @@ body {
 
 .speaker-name-badge {
   position: absolute;
-  top: -20px;
-  left: 30px;
-  padding: 0.6rem 2.2rem;
+  top: -22px;
+  left: 8%; /* Align with dialogue text horizontal padding */
+  padding: 0.6rem 2.5rem;
   font-family: var(--font-title);
   font-size: 1.15rem;
   font-weight: 700;
   border-radius: 12px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.7);
   z-index: 6;
   border: 1px solid rgba(255, 255, 255, 0.15);
   letter-spacing: 0.05em;
@@ -677,16 +782,18 @@ body {
   }
   .characters-stage {
     padding: 0 5%;
+    height: 100vh;
   }
   .character-placeholder {
     width: 150px;
     height: 300px;
   }
   .dialogue-box {
-    padding: 1.5rem;
+    padding: 1.8rem 5% 1.2rem 5%;
+    min-height: 200px;
   }
   .speaker-name-badge {
-    left: 20px;
+    left: 5%;
     padding: 0.4rem 1.5rem;
   }
 }
