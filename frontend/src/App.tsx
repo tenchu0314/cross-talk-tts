@@ -636,19 +636,22 @@ export default function App() {
           </header>
           
           <form className="setup-form" onSubmit={handleStartDebate}>
-            <div className="character-preview-grid">
-              <div className="character-card claire">
-                <img className="character-avatar" src={claireDefault} alt="Claire" />
-                <div className="character-card-content">
-                  <div className="card-title">🛡️ クレア</div>
-                  <div className="card-desc">Speaker 1: 論理的・データ重視。客観的なファクトや数字を突きつける知的な討論者。</div>
+            <div className="setup-vs-banner">
+              <div className="vs-character claire">
+                <img className="vs-avatar" src={claireDefault} alt="Claire" />
+                <div className="vs-info-overlay">
+                  <div className="vs-name">🛡️ クレア</div>
+                  <div className="vs-role">Speaker 1: 論理的JK (データ重視)</div>
                 </div>
               </div>
-              <div className="character-card karen">
-                <img className="character-avatar" src={karenDefault} alt="Karen" />
-                <div className="character-card-content">
-                  <div className="card-title">🔥 カレン</div>
-                  <div className="card-desc">Speaker 2: 感情的・実感主義。情熱や実際の生活の実情を代弁する熱い討論者。</div>
+              <div className="vs-divider-badge">
+                <span className="vs-text">VS</span>
+              </div>
+              <div className="vs-character karen">
+                <img className="vs-avatar" src={karenDefault} alt="Karen" />
+                <div className="vs-info-overlay">
+                  <div className="vs-name">🔥 カレン</div>
+                  <div className="vs-role">Speaker 2: ギャル風JK (現場主義)</div>
                 </div>
               </div>
             </div>
