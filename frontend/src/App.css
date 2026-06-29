@@ -438,13 +438,15 @@ body {
   grid-column: 2;
   grid-row: 1;
   display: flex;
-  justify-content: flex-end; /* Align elements to the right */
+  justify-content: flex-end;
+  /* Align elements to the right */
   align-items: center;
   gap: 1rem;
   width: 100%;
   padding: 0;
   margin: 0;
-  border: none; /* Removed borders since it lives inside grid */
+  border: none;
+  /* Removed borders since it lives inside grid */
 }
 
 .debate-topic-container {
@@ -513,7 +515,7 @@ body {
 }
 
 .character-sprite-container {
-  width: 50;
+  width: 50%;
   /* Slimmer container to fit tall aspect ratio */
   height: 100%;
   display: flex;
@@ -673,8 +675,10 @@ body {
 /* Control & Progress Dashboard in Dialogue Box */
 .dialogue-footer {
   display: grid;
-  grid-template-columns: auto 1fr; /* Skips/playback on left, meta details on right */
-  grid-template-rows: auto auto; /* Two-row layout */
+  grid-template-columns: auto 1fr;
+  /* Skips/playback on left, meta details on right */
+  grid-template-rows: auto auto;
+  /* Two-row layout */
   gap: 1.2rem;
   margin-top: 1.5rem;
   border-top: 1px solid rgba(255, 255, 255, 0.06);
@@ -757,14 +761,17 @@ body {
 
 /* Debating Progress Dashboard (Bottom-Right of dialogue) */
 .debate-progress-stats {
-  grid-column: 1 / span 2; /* Span full width on row 2 */
+  grid-column: 1 / span 2;
+  /* Span full width on row 2 */
   grid-row: 2;
   display: flex;
-  flex-direction: row; /* Horizontal layout */
+  flex-direction: row;
+  /* Horizontal layout */
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  border-top: 1px solid rgba(255, 255, 255, 0.05); /* Divider between controls and progress stats */
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  /* Divider between controls and progress stats */
   padding-top: 0.8rem;
   gap: 1rem;
 }
