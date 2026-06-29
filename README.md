@@ -56,8 +56,8 @@ graph TD
 # ルートのインストール
 npm install
 
-# 各ディレクトリのインストールを一括で行う
-npm run dev:backend --prefix backend & npm run dev:frontend --prefix frontend (またはそれぞれ npm install を実行)
+# バックエンドとフロントエンドの依存関係を一括インストール
+cd backend && npm install && cd .. && cd frontend && npm install && cd ..
 ```
 ※ 手動で個別に行う場合は以下を実行してください：
 ```bash
