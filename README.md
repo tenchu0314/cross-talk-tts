@@ -2,8 +2,8 @@
 
 Gemini API で生成した2人のキャラクターによる対談討論台本を、ローカルで動作する `Irodori-TTS-Server` で音声化し、ADVゲーム風の画面でインテリジェントに順次再生するWebアプリケーションです。
 
-[!['sample']('https://raw.githubusercontent.com/tenchu0314/cross-talk-tts/refs/heads/main/tmp.jpg')]('https://youtu.be/bNOc2E-6tpc?si=wlmYSBRpQYx992gA')
 
+[<img width="3839" height="2159" alt="tmp" src="https://github.com/user-attachments/assets/c1ab7e8c-f1f5-48eb-82f6-bba6f156b4d2" />](https://youtu.be/bNOc2E-6tpc?si=wlmYSBRpQYx992gA)
 
 ---
 
