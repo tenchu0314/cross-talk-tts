@@ -638,12 +638,18 @@ export default function App() {
           <form className="setup-form" onSubmit={handleStartDebate}>
             <div className="character-preview-grid">
               <div className="character-card claire">
-                <div className="card-title">🛡️ クレア</div>
-                <div className="card-desc">Speaker 1: 論理的・データ重視・丁寧な口調。客観的なファクトと数字を突きつける知的な討論者。</div>
+                <img className="character-avatar" src={claireDefault} alt="Claire" />
+                <div className="character-card-content">
+                  <div className="card-title">🛡️ クレア</div>
+                  <div className="card-desc">Speaker 1: 論理的・データ重視。客観的なファクトや数字を突きつける知的な討論者。</div>
+                </div>
               </div>
               <div className="character-card karen">
-                <div className="card-title">🔥 カレン</div>
-                <div className="card-desc">Speaker 2: 感情的・現場の代弁者。実体験や人間味、情熱を持って実情を訴えかける討論者。</div>
+                <img className="character-avatar" src={karenDefault} alt="Karen" />
+                <div className="character-card-content">
+                  <div className="card-title">🔥 カレン</div>
+                  <div className="card-desc">Speaker 2: 感情的・実感主義。情熱や実際の生活の実情を代弁する熱い討論者。</div>
+                </div>
               </div>
             </div>
 

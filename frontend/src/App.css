@@ -206,8 +206,16 @@ body {
   border-radius: 16px;
   padding: 1.2rem;
   display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
+  flex-direction: row;
+  align-items: center;
+  gap: 1.2rem;
+  transition: all 0.3s ease;
+}
+
+.character-card:hover {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px);
 }
 
 .character-card.claire {
@@ -216,6 +224,33 @@ body {
 
 .character-card.karen {
   border-left: 3px solid var(--karen-color);
+}
+
+.character-avatar {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.3);
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+.claire .character-avatar {
+  border-color: var(--claire-color);
+  box-shadow: 0 0 10px rgba(97, 175, 239, 0.25);
+}
+
+.karen .character-avatar {
+  border-color: var(--karen-color);
+  box-shadow: 0 0 10px rgba(224, 108, 117, 0.25);
+}
+
+.character-card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
 }
 
 .card-title {
