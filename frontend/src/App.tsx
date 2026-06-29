@@ -685,19 +685,6 @@ export default function App() {
           className="adv-screen" 
           style={{ backgroundImage: `url(${debateBg})` }}
         >
-          {/* Top Panel for Metadata */}
-          <div className="adv-header-panel">
-            <span className="debate-topic-label">議題: {debateTopic}</span>
-            {searchQueries.length > 0 && (
-              <span className="search-queries-tag">
-                🔍 {searchQueries[0]}
-              </span>
-            )}
-            <button className="close-debate-btn" onClick={handleQuitDebate}>
-              終了する
-            </button>
-          </div>
-
           {/* Characters Presentation */}
           <div className="characters-stage">
             {/* Claire (Left) */}
@@ -782,6 +769,21 @@ export default function App() {
                     disabled={currentIndex === -1 || currentIndex >= turns.length - 1}
                   >
                     次へ ▶
+                  </button>
+                </div>
+
+                {/* Topic and Close controls moved from top */}
+                <div className="dialogue-meta-panel">
+                  <div className="debate-topic-container">
+                    <span className="debate-topic-label">議題: {debateTopic}</span>
+                    {searchQueries.length > 0 && (
+                      <span className="search-queries-tag">
+                        🔍 {searchQueries[0]}
+                      </span>
+                    )}
+                  </div>
+                  <button className="close-debate-btn" onClick={handleQuitDebate}>
+                    終了する
                   </button>
                 </div>
 
