@@ -42,7 +42,9 @@ export default function App() {
   // Image paths
   const claireDefault = '/assets/claire_default.png';
   const claireSerious = '/assets/claire_serious.png';
+  const claireAngry = '/assets/claire_angry.png';
   const karenDefault = '/assets/karen_default.png';
+  const karenSerious = '/assets/karen_serious.png';
   const karenAngry = '/assets/karen_angry.png';
   const debateBg = '/assets/debate_bg.png';
 
@@ -590,11 +592,19 @@ export default function App() {
 
   // Determine images based on speaker & emotion
   const getClaireImg = () => {
-    return currentEmotion === 'serious' && activeSpeaker === 'Speaker1' ? claireSerious : claireDefault;
+    if (activeSpeaker === 'Speaker1') {
+      if (currentEmotion === 'serious') return claireSerious;
+      if (currentEmotion === 'angry') return claireAngry;
+    }
+    return claireDefault;
   };
 
   const getKarenImg = () => {
-    return currentEmotion === 'angry' && activeSpeaker === 'Speaker2' ? karenAngry : karenDefault;
+    if (activeSpeaker === 'Speaker2') {
+      if (currentEmotion === 'serious') return karenSerious;
+      if (currentEmotion === 'angry') return karenAngry;
+    }
+    return karenDefault;
   };
 
   return (
