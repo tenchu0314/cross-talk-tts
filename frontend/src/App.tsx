@@ -476,7 +476,7 @@ export default function App() {
         setCurrentIndex(currentIndex + 1);
       } else {
         setIsPlaying(false);
-        setCurrentIndex(-1); // debate finished
+        // Retain the last index so the dialogue text and character stance remain visible at the end of debate
       }
     });
 
@@ -493,7 +493,10 @@ export default function App() {
   }, [currentIndex, isPlaying, screen, turns]);
 
   const handlePlayPause = () => {
-    if (currentIndex === -1) {
+    // If debate is completed (last turn played and not playing), restart from start
+    const isFinished = currentIndex === turns.length - 1 && turns[currentIndex]?.status === 'played';
+
+    if (currentIndex === -1 || isFinished) {
       // Re-trigger from beginning
       // Reset statuses
       setTurns((prev) => {
@@ -682,19 +685,6 @@ export default function App() {
           className="adv-screen" 
           style={{ backgroundImage: `url(${debateBg})` }}
         >
-          {/* Top Panel for Metadata */}
-          <div className="adv-header-panel">
-            <span className="debate-topic-label">議題: {debateTopic}</span>
-            {searchQueries.length > 0 && (
-              <span className="search-queries-tag">
-                🔍 {searchQueries[0]}
-              </span>
-            )}
-            <button className="close-debate-btn" onClick={handleQuitDebate}>
-              終了する
-            </button>
-          </div>
-
           {/* Characters Presentation */}
           <div className="characters-stage">
             {/* Claire (Left) */}
@@ -779,6 +769,21 @@ export default function App() {
                     disabled={currentIndex === -1 || currentIndex >= turns.length - 1}
                   >
                     次へ ▶
+                  </button>
+                </div>
+
+                {/* Topic and Close controls moved from top */}
+                <div className="dialogue-meta-panel">
+                  <div className="debate-topic-container">
+                    <span className="debate-topic-label">議題: {debateTopic}</span>
+                    {searchQueries.length > 0 && (
+                      <span className="search-queries-tag">
+                        🔍 {searchQueries[0]}
+                      </span>
+                    )}
+                  </div>
+                  <button className="close-debate-btn" onClick={handleQuitDebate}>
+                    終了する
                   </button>
                 </div>
 
