@@ -27,6 +27,7 @@ export default function App() {
   // Debate Input
   const [topic, setTopic] = useState('');
   const [logs, setLogs] = useState<string[]>([]);
+  const [speed, setSpeed] = useState<number>(1.3);
   
   // Debate Playback State
   const [debateTopic, setDebateTopic] = useState('');
@@ -206,7 +207,7 @@ export default function App() {
       const res = await fetch('/api/tts', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text: turnText, speaker }),
+        body: JSON.stringify({ text: turnText, speaker, speed }),
       });
 
       if (debateSessionRef.current !== sessionId) {
@@ -252,7 +253,7 @@ export default function App() {
         let duration = tempAudio.duration;
         // Fallback if browser can't analyze WAV duration
         if (!duration || isNaN(duration) || duration === Infinity) {
-          duration = Math.max(1.5, turnText.length * 0.25);
+          duration = Math.max(1.5, (turnText.length * 0.25) / speed);
         }
 
         cleanup();
@@ -652,6 +653,24 @@ export default function App() {
                 onChange={(e) => setTopic(e.target.value)}
                 required
               />
+            </div>
+            
+            <div className="form-group">
+              <label className="form-label" htmlFor="speed-select">
+                発話速度
+              </label>
+              <select
+                id="speed-select"
+                className="speed-select"
+                value={speed}
+                onChange={(e) => setSpeed(Number(e.target.value))}
+              >
+                <option value="0.8">0.8x (遅め)</option>
+                <option value="1.0">1.0x (標準)</option>
+                <option value="1.3">1.3x (おすすめ - 早め)</option>
+                <option value="1.5">1.5x (高速)</option>
+                <option value="1.8">1.8x (超高速)</option>
+              </select>
             </div>
             
             <button className="start-button" type="submit" disabled={!topic.trim()}>

@@ -206,7 +206,7 @@ ${rawText}
 
 // Proxy to Irodori-TTS-Server
 app.post('/api/tts', async (req: Request, res: Response): Promise<void> => {
-  const { text, speaker } = req.body;
+  const { text, speaker, speed } = req.body;
   if (!text || !speaker) {
     res.status(400).json({ error: 'text and speaker are required' });
     return;
@@ -225,6 +225,7 @@ app.post('/api/tts', async (req: Request, res: Response): Promise<void> => {
         input: text,
         voice: speaker, // Speaker1 or Speaker2
         response_format: 'wav',
+        speed: speed !== undefined ? speed : 1.3,
       }),
     });
 

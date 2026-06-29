@@ -169,6 +169,36 @@ body {
   background: rgba(10, 12, 16, 0.95);
 }
 
+.speed-select {
+  background: rgba(10, 12, 16, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-main);
+  padding: 1.2rem;
+  font-size: 1.1rem;
+  border-radius: 14px;
+  outline: none;
+  font-family: var(--font-body);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%20fill='none'%20stroke='rgba(255,255,255,0.6)'%20stroke-width='2'%20stroke-linecap='round'%20stroke-linejoin='round'%3E%3Cpolyline%20points='6%209%2012%2015%2018%209'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1.2rem center;
+  background-size: 1.2em;
+  padding-right: 3rem;
+}
+
+.speed-select:focus {
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 4px rgba(88, 101, 242, 0.15);
+  background: rgba(10, 12, 16, 0.95);
+}
+
+.speed-select option {
+  background-color: var(--bg-secondary);
+  color: var(--text-main);
+}
+
 .start-button {
   background: var(--accent-gradient);
   color: white;
