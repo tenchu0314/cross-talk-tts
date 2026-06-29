@@ -48,6 +48,11 @@ graph TD
 ### 1. 前提条件
 - Node.js (v18 以上推奨) がインストールされていること。
 - [Irodori-TTS-Server](https://github.com/Aratako/Irodori-TTS-Server) がローカル環境等で起動していること（デフォルト設定では `http://localhost:8088`）。
+- Irodori-TTS-Server の `voices/` フォルダに、以下の **2つのサンプル音声ファイル** が配置されていること（**ファイル名は完全一致が必須**）：
+  - `Speaker1.wav` … クレア（Speaker1）の声のサンプル
+  - `Speaker2.wav` … カレン（Speaker2）の声のサンプル
+
+  > **補足**: バックエンドは TTS リクエスト時に `voice: "Speaker1"` または `voice: "Speaker2"` をそのまま Irodori-TTS-Server へ送信します。サーバー側はこの値を `voices/<value>.wav` のファイル名として参照するため、ファイル名が一致していない場合は音声生成に失敗します。
 
 ### 2. インストール
 リポジトリのルートディレクトリで以下を実行して、共通依存関係およびフロントエンド・バックエンドのパッケージをインストールします：
