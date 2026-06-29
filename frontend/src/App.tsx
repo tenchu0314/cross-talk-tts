@@ -476,7 +476,7 @@ export default function App() {
         setCurrentIndex(currentIndex + 1);
       } else {
         setIsPlaying(false);
-        setCurrentIndex(-1); // debate finished
+        // Retain the last index so the dialogue text and character stance remain visible at the end of debate
       }
     });
 
@@ -493,7 +493,10 @@ export default function App() {
   }, [currentIndex, isPlaying, screen, turns]);
 
   const handlePlayPause = () => {
-    if (currentIndex === -1) {
+    // If debate is completed (last turn played and not playing), restart from start
+    const isFinished = currentIndex === turns.length - 1 && turns[currentIndex]?.status === 'played';
+
+    if (currentIndex === -1 || isFinished) {
       // Re-trigger from beginning
       // Reset statuses
       setTurns((prev) => {

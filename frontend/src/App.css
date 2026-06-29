@@ -120,7 +120,8 @@ body {
 /* --- Screen: Setup Input --- */
 .setup-screen {
   width: 90%;
-  max-width: 850px; /* Expand to give more horizontal breathing room */
+  max-width: 850px;
+  /* Expand to give more horizontal breathing room */
   background: var(--bg-card);
   border: 1px solid var(--border-color);
   border-radius: 24px;
@@ -204,7 +205,8 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: stretch;
-  height: 240px; /* Taller height */
+  height: 240px;
+  /* Taller height */
   background: rgba(10, 12, 18, 0.7);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 20px;
@@ -220,7 +222,8 @@ body {
   position: relative;
   display: flex;
   justify-content: center;
-  align-items: flex-start; /* Align to top to keep faces in frame */
+  align-items: flex-start;
+  /* Align to top to keep faces in frame */
   overflow: hidden;
   height: 100%;
 }
@@ -236,12 +239,14 @@ body {
 }
 
 .vs-avatar {
-  height: 185%; /* Focus heavily on head/shoulders */
+  height: 185%;
+  /* Focus heavily on head/shoulders */
   width: auto;
   object-fit: contain;
   filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.6)) brightness(0.9);
   position: absolute;
-  top: -10px; /* Position from top to prevent face cutoff */
+  top: -10px;
+  /* Position from top to prevent face cutoff */
   transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
@@ -251,12 +256,14 @@ body {
 }
 
 .vs-character.claire .vs-avatar {
-  left: 5%; /* Align closely to edge */
+  left: 5%;
+  /* Align closely to edge */
 }
 
 .vs-character.karen .vs-avatar {
   right: 5%;
-  transform: scaleX(-1); /* Face Claire */
+  transform: scaleX(-1);
+  /* Face Claire */
 }
 
 .vs-character.karen:hover .vs-avatar {
@@ -278,12 +285,14 @@ body {
 
 .vs-character.claire .vs-info-overlay {
   align-items: flex-start;
-  padding-left: 30%; /* Shift text rightwards so it doesn't overlap Claire's sprite */
+  padding-left: 30%;
+  /* Shift text rightwards so it doesn't overlap Claire's sprite */
 }
 
 .vs-character.karen .vs-info-overlay {
   align-items: flex-end;
-  padding-right: 30%; /* Shift text leftwards so it doesn't overlap Karen's sprite */
+  padding-right: 30%;
+  /* Shift text leftwards so it doesn't overlap Karen's sprite */
 }
 
 .vs-name {
@@ -293,8 +302,13 @@ body {
   letter-spacing: 0.02em;
 }
 
-.vs-character.claire .vs-name { color: var(--claire-color); }
-.vs-character.karen .vs-name { color: var(--karen-color); }
+.vs-character.claire .vs-name {
+  color: var(--claire-color);
+}
+
+.vs-character.karen .vs-name {
+  color: var(--karen-color);
+}
 
 .vs-role {
   font-size: 0.8rem;
@@ -375,7 +389,7 @@ body {
   color: #34d399;
   max-height: 150px;
   overflow-y: auto;
-  box-shadow: inset 0 2px 8px rgba(0,0,0,0.8);
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.8);
 }
 
 .log-entry {
@@ -494,21 +508,25 @@ body {
 }
 
 .character-sprite-container {
-  width: 35%; /* Slimmer container to fit tall aspect ratio */
+  width: 50;
+  /* Slimmer container to fit tall aspect ratio */
   height: 100%;
   display: flex;
   justify-content: center;
   align-items: flex-end;
   transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
   position: relative;
-  margin-bottom: 0; /* Keep baseline attached to bottom */
+  margin-bottom: 0;
+  /* Keep baseline attached to bottom */
 }
 
 .character-sprite {
   max-width: 100%;
-  height: 92vh; /* Scale sprite close to top of screen */
+  height: 92vh;
+  /* Scale sprite close to top of screen */
   object-fit: contain;
-  object-position: bottom; /* Keep base anchored at bottom */
+  object-position: bottom;
+  /* Keep base anchored at bottom */
   filter: drop-shadow(0 15px 35px rgba(0, 0, 0, 0.6)) brightness(0.65) grayscale(15%);
   transform: scale(0.9);
   transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
@@ -522,7 +540,8 @@ body {
 
 .character-sprite-container.active .character-sprite {
   filter: drop-shadow(0 20px 50px rgba(88, 101, 242, 0.4)) brightness(1.05) grayscale(0%);
-  transform: scale(1.04) translateY(-15px); /* Lift and scale up active character significantly */
+  transform: scale(1.04) translateY(-15px);
+  /* Lift and scale up active character significantly */
 }
 
 .character-sprite-container.inactive {
@@ -530,7 +549,7 @@ body {
 }
 
 .character-sprite-container.inactive .character-sprite {
-  filter: drop-shadow(0 10px 20px rgba(0,0,0,0.8)) brightness(0.45) grayscale(35%);
+  filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.8)) brightness(0.45) grayscale(35%);
   transform: scale(0.88) translateY(0);
 }
 
@@ -545,7 +564,7 @@ body {
   align-items: center;
   border: 2px dashed rgba(255, 255, 255, 0.2);
   background: rgba(10, 12, 16, 0.7);
-  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
   transition: all 0.4s ease;
   color: var(--text-muted);
   text-align: center;
@@ -567,8 +586,13 @@ body {
   transform: scale(1.03) translateY(-10px);
 }
 
-.character-sprite-container.claire.active .character-placeholder-name { color: var(--claire-color); }
-.character-sprite-container.karen.active .character-placeholder-name { color: var(--karen-color); }
+.character-sprite-container.claire.active .character-placeholder-name {
+  color: var(--claire-color);
+}
+
+.character-sprite-container.karen.active .character-placeholder-name {
+  color: var(--karen-color);
+}
 
 /* Dialogue Text Box */
 .dialogue-window-container {
@@ -583,16 +607,20 @@ body {
 }
 
 .dialogue-box {
-  background: rgba(9, 11, 16, 0.94); /* Higher opacity to block visibility of cut-off character sprites */
-  border-top: 1px solid rgba(255, 255, 255, 0.12); /* Subtle glowing top border */
+  background: rgba(9, 11, 16, 0.94);
+  /* Higher opacity to block visibility of cut-off character sprites */
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  /* Subtle glowing top border */
   border-left: none;
   border-right: none;
   border-bottom: none;
-  border-radius: 24px 24px 0 0; /* Rounded top corners only */
+  border-radius: 24px 24px 0 0;
+  /* Rounded top corners only */
   padding: 2.2rem 8% 1.8rem 8%;
   min-height: 230px;
   position: relative;
-  box-shadow: 0 -15px 40px rgba(0, 0, 0, 0.85); /* Casting shadow upward */
+  box-shadow: 0 -15px 40px rgba(0, 0, 0, 0.85);
+  /* Casting shadow upward */
   backdrop-filter: blur(25px);
   display: flex;
   flex-direction: column;
@@ -602,7 +630,8 @@ body {
 .speaker-name-badge {
   position: absolute;
   top: -22px;
-  left: 8%; /* Align with dialogue text horizontal padding */
+  left: 8%;
+  /* Align with dialogue text horizontal padding */
   padding: 0.6rem 2.5rem;
   font-family: var(--font-title);
   font-size: 1.15rem;
@@ -741,12 +770,31 @@ body {
   transition: all 0.3s ease;
 }
 
-.progress-node.pending { background: rgba(255, 255, 255, 0.1); }
-.progress-node.loading { background: rgba(245, 158, 11, 0.3); animation: pulse 1s infinite alternate; }
-.progress-node.ready { background: rgba(16, 185, 129, 0.3); }
-.progress-node.playing { background: var(--accent-color); box-shadow: 0 0 10px var(--accent-color); }
-.progress-node.played { background: rgba(16, 185, 129, 0.8); }
-.progress-node.error { background: rgba(224, 108, 117, 0.8); }
+.progress-node.pending {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.progress-node.loading {
+  background: rgba(245, 158, 11, 0.3);
+  animation: pulse 1s infinite alternate;
+}
+
+.progress-node.ready {
+  background: rgba(16, 185, 129, 0.3);
+}
+
+.progress-node.playing {
+  background: var(--accent-color);
+  box-shadow: 0 0 10px var(--accent-color);
+}
+
+.progress-node.played {
+  background: rgba(16, 185, 129, 0.8);
+}
+
+.progress-node.error {
+  background: rgba(224, 108, 117, 0.8);
+}
 
 .stats-text {
   font-size: 0.75rem;
@@ -756,23 +804,45 @@ body {
 
 /* --- Animations --- */
 @keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes slideUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes pulse {
-  from { opacity: 0.4; }
-  to { opacity: 1; }
+  from {
+    opacity: 0.4;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 /* Responsive adjustments */
@@ -780,18 +850,22 @@ body {
   .character-preview-grid {
     grid-template-columns: 1fr;
   }
+
   .characters-stage {
     padding: 0 5%;
     height: 100vh;
   }
+
   .character-placeholder {
     width: 150px;
     height: 300px;
   }
+
   .dialogue-box {
     padding: 1.8rem 5% 1.2rem 5%;
     min-height: 200px;
   }
+
   .speaker-name-badge {
     left: 5%;
     padding: 0.4rem 1.5rem;
