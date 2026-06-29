@@ -418,15 +418,15 @@ export default function App() {
     }
   }, [bufferState.canPlay, screen, currentIndex]);
 
-  // Audio Playback effect
+  // Audio Playback & Buffering controller
   useEffect(() => {
     if (screen !== 'adv' || currentIndex === -1) return;
 
     const turn = turns[currentIndex];
     if (!turn) return;
 
-    if (turn.status !== 'ready') {
-      // Buffer underflow! Stop audio and wait
+    // 1. Buffer underflow: pause and show buffer overlay if not ready yet
+    if (turn.status === 'pending' || turn.status === 'loading') {
       setIsBuffering(true);
       if (audioRef.current) {
         audioRef.current.pause();
@@ -434,9 +434,10 @@ export default function App() {
       return;
     }
 
+    // 2. Buffer restored: clear buffering state
     setIsBuffering(false);
 
-    // If audio is already created and current source is same, just control playback
+    // 3. Playback control for same audio source
     if (audioRef.current && audioRef.current.src === turn.audioUrl) {
       if (isPlaying) {
         audioRef.current.play().catch(console.error);
@@ -446,7 +447,7 @@ export default function App() {
       return;
     }
 
-    // Initialize new audio element
+    // 4. Initialize and play new audio source
     if (audioRef.current) {
       audioRef.current.pause();
     }
@@ -454,21 +455,20 @@ export default function App() {
     const audio = new Audio(turn.audioUrl!);
     audioRef.current = audio;
 
-    // Set playing state in turns
+    // Set playing state
     setTurns((prev) => {
       const updated = [...prev];
-      // Mark previous playing as played
       updated.forEach((t, i) => {
         if (t.status === 'playing') updated[i].status = 'played';
       });
-      updated[currentIndex].status = 'playing';
+      if (updated[currentIndex]) updated[currentIndex].status = 'playing';
       return updated;
     });
 
     audio.addEventListener('ended', () => {
       setTurns((prev) => {
         const updated = [...prev];
-        updated[currentIndex].status = 'played';
+        if (updated[currentIndex]) updated[currentIndex].status = 'played';
         return updated;
       });
 
@@ -490,27 +490,7 @@ export default function App() {
       audio.pause();
     };
 
-  }, [currentIndex, isPlaying, screen]);
-
-  // Watch if buffering turn becomes ready, and resume
-  useEffect(() => {
-    if (isBuffering && currentIndex !== -1) {
-      const turn = turns[currentIndex];
-      if (turn && turn.status === 'ready') {
-        setIsBuffering(false);
-        if (isPlaying && audioRef.current) {
-          audioRef.current.src = turn.audioUrl!;
-          // Mark status
-          setTurns((prev) => {
-            const updated = [...prev];
-            updated[currentIndex].status = 'playing';
-            return updated;
-          });
-          audioRef.current.play().catch(console.error);
-        }
-      }
-    }
-  }, [turns, isBuffering, currentIndex, isPlaying]);
+  }, [currentIndex, isPlaying, screen, turns]);
 
   const handlePlayPause = () => {
     if (currentIndex === -1) {
