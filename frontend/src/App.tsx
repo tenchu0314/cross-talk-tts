@@ -27,6 +27,7 @@ export default function App() {
   // Debate Input
   const [topic, setTopic] = useState('');
   const [logs, setLogs] = useState<string[]>([]);
+  const [speed, setSpeed] = useState<number>(1.3);
   
   // Debate Playback State
   const [debateTopic, setDebateTopic] = useState('');
@@ -35,6 +36,7 @@ export default function App() {
   const [currentIndex, setCurrentIndex] = useState<number>(-1);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isBuffering, setIsBuffering] = useState(false);
+  const [isDebateFinished, setIsDebateFinished] = useState(false);
   
   // Average TTS generation statistics
   const [averageSpeed, setAverageSpeed] = useState<number | null>(null); // seconds per character
@@ -206,7 +208,7 @@ export default function App() {
       const res = await fetch('/api/tts', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text: turnText, speaker }),
+        body: JSON.stringify({ text: turnText, speaker, speed }),
       });
 
       if (debateSessionRef.current !== sessionId) {
@@ -252,7 +254,7 @@ export default function App() {
         let duration = tempAudio.duration;
         // Fallback if browser can't analyze WAV duration
         if (!duration || isNaN(duration) || duration === Infinity) {
-          duration = Math.max(1.5, turnText.length * 0.25);
+          duration = Math.max(1.5, (turnText.length * 0.25) / speed);
         }
 
         cleanup();
@@ -476,7 +478,8 @@ export default function App() {
         setCurrentIndex(currentIndex + 1);
       } else {
         setIsPlaying(false);
-        // Retain the last index so the dialogue text and character stance remain visible at the end of debate
+        // Show end overlay
+        setIsDebateFinished(true);
       }
     });
 
@@ -562,10 +565,27 @@ export default function App() {
     setCurrentIndex(-1);
     setIsPlaying(false);
     setIsBuffering(false);
+    setIsDebateFinished(false);
     setSearchQueries([]);
     setDebateTopic('');
     
     setScreen('input');
+  };
+
+  const handleReplayDebate = () => {
+    setIsDebateFinished(false);
+    // Reset all played turns back to ready
+    setTurns((prev) => {
+      const updated = [...prev];
+      updated.forEach((t, i) => {
+        if (t.status === 'played' || t.status === 'playing') {
+          updated[i] = { ...updated[i], status: 'ready' };
+        }
+      });
+      return updated;
+    });
+    setCurrentIndex(0);
+    setIsPlaying(true);
   };
 
   // Determine current active speaker
@@ -652,6 +672,24 @@ export default function App() {
                 onChange={(e) => setTopic(e.target.value)}
                 required
               />
+            </div>
+            
+            <div className="form-group">
+              <label className="form-label" htmlFor="speed-select">
+                発話速度
+              </label>
+              <select
+                id="speed-select"
+                className="speed-select"
+                value={speed}
+                onChange={(e) => setSpeed(Number(e.target.value))}
+              >
+                <option value="0.8">0.8x (遅め)</option>
+                <option value="1.0">1.0x (標準)</option>
+                <option value="1.3">1.3x (おすすめ - 早め)</option>
+                <option value="1.5">1.5x (高速)</option>
+                <option value="1.8">1.8x (超高速)</option>
+              </select>
             </div>
             
             <button className="start-button" type="submit" disabled={!topic.trim()}>
@@ -827,6 +865,33 @@ export default function App() {
               )}
             </div>
           </div>
+
+          {/* Debate End Overlay */}
+          {isDebateFinished && (
+            <div className="debate-end-overlay">
+              <div className="debate-end-card">
+                <div className="debate-end-icon">🎭</div>
+                <h2 className="debate-end-title">討論終了</h2>
+                <p className="debate-end-subtitle">{debateTopic}</p>
+                <div className="debate-end-actions">
+                  <button
+                    id="replay-debate-btn"
+                    className="replay-btn"
+                    onClick={handleReplayDebate}
+                  >
+                    🔄 もう一度聞く
+                  </button>
+                  <button
+                    id="quit-after-finish-btn"
+                    className="quit-after-finish-btn"
+                    onClick={handleQuitDebate}
+                  >
+                    ✕ 終了する
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       )}
     </div>
