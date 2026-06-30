@@ -30,6 +30,7 @@ export function DebatePlayerScreen(props: DebatePlayerScreenProps) {
     searchQueries,
     bufferState,
     speakerConfig,
+    hideUI,
     currentTurn,
     activeSpeaker,
     currentEmotion,
@@ -71,41 +72,43 @@ export function DebatePlayerScreen(props: DebatePlayerScreenProps) {
       {/* セリフボックス */}
       <DialogueBox currentTurn={currentTurn} speakerConfig={speakerConfig}>
         {/* フッター: 操作・メタ情報・進捗 */}
-        <div className="dialogue-footer">
-          {/* 再生操作ボタン */}
-          <PlaybackControls
-            isPlaying={isPlaying}
-            canPlay={bufferState.canPlay}
-            currentIndex={currentIndex}
-            totalTurns={turns.length}
-            onPlayPause={handlePlayPause}
-            onSkipForward={handleSkipForward}
-            onSkipBackward={handleSkipBackward}
-          />
+        {!hideUI && (
+          <div className="dialogue-footer">
+            {/* 再生操作ボタン */}
+            <PlaybackControls
+              isPlaying={isPlaying}
+              canPlay={bufferState.canPlay}
+              currentIndex={currentIndex}
+              totalTurns={turns.length}
+              onPlayPause={handlePlayPause}
+              onSkipForward={handleSkipForward}
+              onSkipBackward={handleSkipBackward}
+            />
 
-          {/* 議題と終了ボタン */}
-          <div className="dialogue-meta-panel">
-            <div className="debate-topic-container">
-              <span className="debate-topic-label">議題: {debateTopic}</span>
-              {searchQueries.length > 0 && (
-                <span className="search-queries-tag">
-                  🔍 {searchQueries[0]}
-                </span>
-              )}
+            {/* 議題と終了ボタン */}
+            <div className="dialogue-meta-panel">
+              <div className="debate-topic-container">
+                <span className="debate-topic-label">議題: {debateTopic}</span>
+                {searchQueries.length > 0 && (
+                  <span className="search-queries-tag">
+                    🔍 {searchQueries[0]}
+                  </span>
+                )}
+              </div>
+              <button className="close-debate-btn" onClick={handleQuitDebate}>
+                終了する
+              </button>
             </div>
-            <button className="close-debate-btn" onClick={handleQuitDebate}>
-              終了する
-            </button>
-          </div>
 
-          {/* ターン進捗バー */}
-          <ProgressTrack
-            turns={turns}
-            currentIndex={currentIndex}
-            isPlaying={isPlaying}
-            isBuffering={isBuffering}
-          />
-        </div>
+            {/* ターン進捗バー */}
+            <ProgressTrack
+              turns={turns}
+              currentIndex={currentIndex}
+              isPlaying={isPlaying}
+              isBuffering={isBuffering}
+            />
+          </div>
+        )}
 
         {/* バッファリングオーバーレイ（再生中のバッファ待ち） */}
         {isBuffering && (
