@@ -1,0 +1,249 @@
+/* InputScreen.css — 議題入力画面のスタイル */
+
+.setup-screen {
+  width: 90%;
+  max-width: 850px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 24px;
+  padding: 3rem;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(20px);
+  animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.setup-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-label {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* 議題入力フィールド */
+.topic-input {
+  background: rgba(10, 12, 16, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-main);
+  padding: 1.2rem;
+  font-size: 1.1rem;
+  border-radius: 14px;
+  outline: none;
+  font-family: var(--font-body);
+  transition: all 0.3s ease;
+}
+
+.topic-input:focus {
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 4px rgba(88, 101, 242, 0.15);
+  background: rgba(10, 12, 16, 0.95);
+}
+
+/* 速度選択ドロップダウン */
+.speed-select {
+  background: rgba(10, 12, 16, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-main);
+  padding: 1.2rem;
+  font-size: 1.1rem;
+  border-radius: 14px;
+  outline: none;
+  font-family: var(--font-body);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%20fill='none'%20stroke='rgba(255,255,255,0.6)'%20stroke-width='2'%20stroke-linecap='round'%20stroke-linejoin='round'%3E%3Cpolyline%20points='6%209%2012%2015%2018%209'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1.2rem center;
+  background-size: 1.2em;
+  padding-right: 3rem;
+}
+
+.speed-select:focus {
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 4px rgba(88, 101, 242, 0.15);
+  background: rgba(10, 12, 16, 0.95);
+}
+
+.speed-select option {
+  background-color: var(--bg-secondary);
+  color: var(--text-main);
+}
+
+/* 開始ボタン */
+.start-button {
+  background: var(--accent-gradient);
+  color: white;
+  border: none;
+  padding: 1.2rem;
+  font-size: 1.2rem;
+  font-weight: 700;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 10px 25px rgba(88, 101, 242, 0.35);
+  margin-top: 1rem;
+}
+
+.start-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 15px 30px rgba(88, 101, 242, 0.45);
+}
+
+.start-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* --- キャラクターVSバナー --- */
+.setup-vs-banner {
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+  height: 240px;
+  background: rgba(10, 12, 18, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  overflow: hidden;
+  position: relative;
+  margin-bottom: 2rem;
+  box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.9), 0 15px 35px rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(10px);
+}
+
+.vs-character {
+  flex: 1;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  overflow: hidden;
+  height: 100%;
+}
+
+.vs-character.claire {
+  background: linear-gradient(90deg, rgba(30, 58, 138, 0.25) 0%, rgba(10, 12, 18, 0) 100%);
+  border-right: 1px dashed rgba(255, 255, 255, 0.06);
+}
+
+.vs-character.karen {
+  background: linear-gradient(270deg, rgba(127, 29, 29, 0.25) 0%, rgba(10, 12, 18, 0) 100%);
+  border-left: 1px dashed rgba(255, 255, 255, 0.06);
+}
+
+/* キャラクターアバター画像 */
+.vs-avatar {
+  height: 185%;
+  width: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.6)) brightness(0.9);
+  position: absolute;
+  top: -10px;
+  transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.vs-character:hover .vs-avatar {
+  filter: drop-shadow(0 15px 25px rgba(88, 101, 242, 0.35)) brightness(1.05);
+  transform: scale(1.04) translateY(2px);
+}
+
+.vs-character.claire .vs-avatar {
+  left: 5%;
+}
+
+.vs-character.karen .vs-avatar {
+  right: 5%;
+  transform: scaleX(-1);
+}
+
+.vs-character.karen:hover .vs-avatar {
+  transform: scale(-1.04, 1.04) translateY(2px);
+}
+
+/* キャラクター情報オーバーレイ */
+.vs-info-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 1rem 1.5rem;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(10, 12, 18, 0.95) 80%);
+  display: flex;
+  flex-direction: column;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.vs-character.claire .vs-info-overlay {
+  align-items: flex-start;
+  padding-left: 30%;
+}
+
+.vs-character.karen .vs-info-overlay {
+  align-items: flex-end;
+  padding-right: 30%;
+}
+
+.vs-name {
+  font-family: var(--font-title);
+  font-weight: 800;
+  font-size: 1.2rem;
+  letter-spacing: 0.02em;
+}
+
+.vs-character.claire .vs-name {
+  color: var(--claire-color);
+}
+
+.vs-character.karen .vs-name {
+  color: var(--karen-color);
+}
+
+.vs-role {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-weight: 500;
+  margin-top: 0.1rem;
+}
+
+/* VS バッジ */
+.vs-divider-badge {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #11141a;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 3;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.9);
+}
+
+.vs-text {
+  font-family: var(--font-title);
+  font-weight: 900;
+  font-size: 1.1rem;
+  font-style: italic;
+  background: linear-gradient(135deg, #f43f5e 0%, #e11d48 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 10px rgba(225, 29, 72, 0.5);
+}

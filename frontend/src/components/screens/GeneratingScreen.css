@@ -1,0 +1,30 @@
+/* GeneratingScreen.css — 討論生成中画面のスタイル */
+/* 注: .loading-screen, .loading-spinner の基本スタイルはApp.cssのグローバルスタイルを使用 */
+
+/* 生成ログパネル */
+.loading-logs-panel {
+  background: #07090d;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 1.2rem;
+  text-align: left;
+  font-family: monospace;
+  font-size: 0.85rem;
+  color: #34d399;
+  max-height: 150px;
+  overflow-y: auto;
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.8);
+}
+
+/* ログエントリ */
+.log-entry {
+  margin-bottom: 0.4rem;
+  opacity: 0.85;
+}
+
+/* 最新のログエントリ（ハイライト） */
+.log-entry.active {
+  opacity: 1;
+  font-weight: 700;
+  color: #6ee7b7;
+}

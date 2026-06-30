@@ -1,0 +1,63 @@
+/* ProgressTrack.css — ターン進捗バーのスタイル */
+
+.debate-progress-stats {
+  grid-column: 1 / span 2;
+  grid-row: 2;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  padding-top: 0.8rem;
+  gap: 1rem;
+}
+
+/* 進捗ノードの並び */
+.progress-track-wrapper {
+  display: flex;
+  gap: 4px;
+}
+
+/* 各ノードの基本スタイル */
+.progress-node {
+  width: 24px;
+  height: 6px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+/* 状態別カラー */
+.progress-node.pending {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.progress-node.loading {
+  background: rgba(245, 158, 11, 0.3);
+  animation: pulse 1s infinite alternate;
+}
+
+.progress-node.ready {
+  background: rgba(16, 185, 129, 0.3);
+}
+
+.progress-node.playing {
+  background: var(--accent-color);
+  box-shadow: 0 0 10px var(--accent-color);
+}
+
+.progress-node.played {
+  background: rgba(16, 185, 129, 0.8);
+}
+
+.progress-node.error {
+  background: rgba(224, 108, 117, 0.8);
+}
+
+/* 進捗テキスト */
+.stats-text {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}

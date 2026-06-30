@@ -1,0 +1,44 @@
+/* PlaybackControls.css — 再生操作ボタン群のスタイル */
+
+.playback-controls {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+/* 基本ボタンスタイル */
+.control-btn {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--text-main);
+  padding: 0.6rem 1.2rem;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.control-btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-1px);
+}
+
+.control-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* プライマリボタン（再生/一時停止） */
+.control-btn.primary {
+  background: var(--accent-gradient);
+  border: none;
+  box-shadow: 0 4px 15px rgba(88, 101, 242, 0.25);
+}
+
+.control-btn.primary:hover:not(:disabled) {
+  box-shadow: 0 6px 20px rgba(88, 101, 242, 0.35);
+}

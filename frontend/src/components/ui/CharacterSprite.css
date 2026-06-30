@@ -1,0 +1,115 @@
+/* CharacterSprite.css — キャラクター立ち絵のスタイル */
+
+/* キャラクター表示エリア */
+.characters-stage {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 8% 0 8%;
+  align-items: flex-end;
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* 各キャラクターのコンテナ */
+.character-sprite-container {
+  width: 50%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+  position: relative;
+  margin-bottom: 0;
+}
+
+/* キャラクター画像 */
+.character-sprite {
+  max-width: 100%;
+  height: 92vh;
+  object-fit: contain;
+  object-position: bottom;
+  filter: drop-shadow(0 15px 35px rgba(0, 0, 0, 0.6)) brightness(0.65) grayscale(15%);
+  transform: scale(0.9);
+  transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+  will-change: transform, filter;
+}
+
+/* アクティブ状態（発話中のキャラクター） */
+.character-sprite-container.active {
+  z-index: 3;
+}
+
+.character-sprite-container.active .character-sprite {
+  filter: drop-shadow(0 20px 50px rgba(88, 101, 242, 0.4)) brightness(1.05) grayscale(0%);
+  transform: scale(1.04) translateY(-15px);
+}
+
+/* 非アクティブ状態 */
+.character-sprite-container.inactive {
+  z-index: 2;
+}
+
+.character-sprite-container.inactive .character-sprite {
+  filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.8)) brightness(0.45) grayscale(35%);
+  transform: scale(0.88) translateY(0);
+}
+
+/* 画像読み込み失敗時のプレースホルダー */
+.character-placeholder {
+  width: 250px;
+  height: 450px;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: 2px dashed rgba(255, 255, 255, 0.2);
+  background: rgba(10, 12, 16, 0.7);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  transition: all 0.4s ease;
+  color: var(--text-muted);
+  text-align: center;
+  padding: 1.5rem;
+}
+
+.character-placeholder-name {
+  font-family: var(--font-title);
+  font-size: 2rem;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+}
+
+/* アクティブ時のプレースホルダー */
+.character-sprite-container.active .character-placeholder {
+  border-color: var(--accent-color);
+  background: rgba(25, 30, 40, 0.85);
+  box-shadow: 0 15px 40px rgba(88, 101, 242, 0.25);
+  color: var(--text-main);
+  transform: scale(1.03) translateY(-10px);
+}
+
+.character-sprite-container.claire.active .character-placeholder-name {
+  color: var(--claire-color);
+}
+
+.character-sprite-container.karen.active .character-placeholder-name {
+  color: var(--karen-color);
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
+  .characters-stage {
+    padding: 0 5%;
+    height: 100vh;
+  }
+
+  .character-placeholder {
+    width: 150px;
+    height: 300px;
+  }
+}
