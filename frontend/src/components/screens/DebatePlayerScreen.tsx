@@ -14,6 +14,7 @@ import { PlaybackControls } from '../ui/PlaybackControls';
 import { ProgressTrack } from '../ui/ProgressTrack';
 import { BufferingOverlay } from '../ui/BufferingOverlay';
 import { DebateEndOverlay } from '../ui/DebateEndOverlay';
+import { BufferingTitleOverlay } from '../ui/BufferingTitleOverlay';
 import './DebatePlayerScreen.css';
 
 type DebatePlayerScreenProps = DebatePlayerState;
@@ -43,6 +44,11 @@ export function DebatePlayerScreen(props: DebatePlayerScreenProps) {
     getSpeaker2Img,
   } = props;
 
+  // バッファリング中（初期バッファリングまたは再生中の追加バッファリング）であるか
+  const isBufferingState = isBuffering || (currentIndex === -1 && !bufferState.canPlay);
+  // UI非表示モードかつバッファ中の場合はタイトル画面を表示する
+  const showBufferingTitle = hideUI && isBufferingState;
+
   return (
     <div
       className="adv-screen"
@@ -69,57 +75,64 @@ export function DebatePlayerScreen(props: DebatePlayerScreenProps) {
         />
       </div>
 
-      {/* セリフボックス */}
-      <DialogueBox currentTurn={currentTurn} speakerConfig={speakerConfig}>
-        {/* フッター: 操作・メタ情報・進捗 */}
-        {!hideUI && (
-          <div className="dialogue-footer">
-            {/* 再生操作ボタン */}
-            <PlaybackControls
-              isPlaying={isPlaying}
-              canPlay={bufferState.canPlay}
-              currentIndex={currentIndex}
-              totalTurns={turns.length}
-              onPlayPause={handlePlayPause}
-              onSkipForward={handleSkipForward}
-              onSkipBackward={handleSkipBackward}
-            />
+      {/* バッファリング時のタイトル画面（UI非表示モードかつバッファ中） */}
+      {showBufferingTitle && (
+        <BufferingTitleOverlay debateTopic={debateTopic} />
+      )}
 
-            {/* 議題と終了ボタン */}
-            <div className="dialogue-meta-panel">
-              <div className="debate-topic-container">
-                <span className="debate-topic-label">議題: {debateTopic}</span>
-                {searchQueries.length > 0 && (
-                  <span className="search-queries-tag">
-                    🔍 {searchQueries[0]}
-                  </span>
-                )}
+      {/* セリフボックス (タイトル画面を表示しない時のみ表示) */}
+      {!showBufferingTitle && (
+        <DialogueBox currentTurn={currentTurn} speakerConfig={speakerConfig}>
+          {/* フッター: 操作・メタ情報・進捗 */}
+          {!hideUI && (
+            <div className="dialogue-footer">
+              {/* 再生操作ボタン */}
+              <PlaybackControls
+                isPlaying={isPlaying}
+                canPlay={bufferState.canPlay}
+                currentIndex={currentIndex}
+                totalTurns={turns.length}
+                onPlayPause={handlePlayPause}
+                onSkipForward={handleSkipForward}
+                onSkipBackward={handleSkipBackward}
+              />
+
+              {/* 議題と終了ボタン */}
+              <div className="dialogue-meta-panel">
+                <div className="debate-topic-container">
+                  <span className="debate-topic-label">議題: {debateTopic}</span>
+                  {searchQueries.length > 0 && (
+                    <span className="search-queries-tag">
+                      🔍 {searchQueries[0]}
+                    </span>
+                  )}
+                </div>
+                <button className="close-debate-btn" onClick={handleQuitDebate}>
+                  終了する
+                </button>
               </div>
-              <button className="close-debate-btn" onClick={handleQuitDebate}>
-                終了する
-              </button>
+
+              {/* ターン進捗バー */}
+              <ProgressTrack
+                turns={turns}
+                currentIndex={currentIndex}
+                isPlaying={isPlaying}
+                isBuffering={isBuffering}
+              />
             </div>
+          )}
 
-            {/* ターン進捗バー */}
-            <ProgressTrack
-              turns={turns}
-              currentIndex={currentIndex}
-              isPlaying={isPlaying}
-              isBuffering={isBuffering}
-            />
-          </div>
-        )}
+          {/* バッファリングオーバーレイ（再生中のバッファ待ち。通常UIモード時のみ） */}
+          {isBuffering && (
+            <BufferingOverlay message="音声の生成を待っています..." />
+          )}
 
-        {/* バッファリングオーバーレイ（再生中のバッファ待ち） */}
-        {isBuffering && (
-          <BufferingOverlay message="音声の生成を待っています..." />
-        )}
-
-        {/* 初期バッファリングオーバーレイ（再生開始前） */}
-        {currentIndex === -1 && !bufferState.canPlay && (
-          <BufferingOverlay message={bufferState.msg} />
-        )}
-      </DialogueBox>
+          {/* 初期バッファリングオーバーレイ（再生開始前。通常UIモード時のみ） */}
+          {currentIndex === -1 && !bufferState.canPlay && (
+            <BufferingOverlay message={bufferState.msg} />
+          )}
+        </DialogueBox>
+      )}
 
       {/* 討論終了オーバーレイ */}
       {isDebateFinished && (
