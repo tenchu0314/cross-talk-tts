@@ -12,6 +12,12 @@ export interface DebateTurn {
   emotion: 'default' | 'serious' | 'angry';
 }
 
+/** スピーカー表示名設定 */
+export interface SpeakerConfig {
+  speaker1Name: string;
+  speaker2Name: string;
+}
+
 /** DebateTurn に再生・TTS生成状態を追加したフロントエンド用の型 */
 export interface TurnState extends DebateTurn {
   /** 生成された音声のBlob URL（未生成時はnull） */

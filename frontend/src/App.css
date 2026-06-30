@@ -25,8 +25,8 @@
   --border-color: rgba(255, 255, 255, 0.08);
   --accent-color: #5865f2;
   --accent-gradient: linear-gradient(135deg, #7289da 0%, #5865f2 100%);
-  --claire-color: #61afef;
-  --karen-color: #e06c75;
+  --speaker1-color: #61afef;
+  --speaker2-color: #e06c75;
   --text-main: #f3f4f6;
   --text-muted: #9ca3af;
   --font-title: 'Outfit', 'Noto Sans JP', sans-serif;

@@ -7,7 +7,7 @@
  */
 
 import { useState, useEffect, useRef, useCallback } from 'react';
-import type { TurnState, DebateData, ScreenType, BufferState } from '../types';
+import type { TurnState, DebateData, ScreenType, BufferState, SpeakerConfig } from '../types';
 import {
   MAX_CONCURRENT_REQUESTS,
   AUDIO_LOAD_TIMEOUT_MS,
@@ -26,6 +26,8 @@ interface UseDebatePlayerArgs {
   onScreenChange: (screen: ScreenType) => void;
   /** ログ追加コールバック（生成画面のログ表示用） */
   addLog: (message: string) => void;
+  /** スピーカー表示名設定 */
+  speakerConfig: SpeakerConfig;
 }
 
 /** Hookの返り値の型 */
@@ -47,6 +49,8 @@ export interface DebatePlayerState {
   searchQueries: string[];
   /** バッファ状態（再生可能か、メッセージ） */
   bufferState: BufferState;
+  /** スピーカー表示名設定 */
+  speakerConfig: SpeakerConfig;
 
   // --- 現在のターン情報（派生値） ---
   /** 現在のターンオブジェクト（nullは再生前） */
@@ -70,9 +74,9 @@ export interface DebatePlayerState {
   /** 討論をもう一度最初から再生する */
   handleReplayDebate: () => void;
   /** キャラクター画像のパスを取得する */
-  getClaireImg: () => string;
+  getSpeaker1Img: () => string;
   /** キャラクター画像のパスを取得する */
-  getKarenImg: () => string;
+  getSpeaker2Img: () => string;
 }
 
 /**
@@ -82,6 +86,7 @@ export function useDebatePlayer({
   screen,
   onScreenChange,
   addLog,
+  speakerConfig,
 }: UseDebatePlayerArgs): DebatePlayerState {
   // =========================================================================
   // 状態管理
@@ -712,22 +717,22 @@ export function useDebatePlayer({
   const activeSpeaker = currentTurn?.speaker || null;
   const currentEmotion = currentTurn?.emotion || 'default';
 
-  /** クレアの画像パスを取得する */
-  const getClaireImg = useCallback((): string => {
+  /** Speaker1の画像パスを取得する */
+  const getSpeaker1Img = useCallback((): string => {
     if (activeSpeaker === 'Speaker1') {
-      if (currentEmotion === 'serious') return CHARACTER_IMAGES.claire.serious;
-      if (currentEmotion === 'angry') return CHARACTER_IMAGES.claire.angry;
+      if (currentEmotion === 'serious') return CHARACTER_IMAGES.Speaker1.serious;
+      if (currentEmotion === 'angry') return CHARACTER_IMAGES.Speaker1.angry;
     }
-    return CHARACTER_IMAGES.claire.default;
+    return CHARACTER_IMAGES.Speaker1.default;
   }, [activeSpeaker, currentEmotion]);
 
-  /** カレンの画像パスを取得する */
-  const getKarenImg = useCallback((): string => {
+  /** Speaker2の画像パスを取得する */
+  const getSpeaker2Img = useCallback((): string => {
     if (activeSpeaker === 'Speaker2') {
-      if (currentEmotion === 'serious') return CHARACTER_IMAGES.karen.serious;
-      if (currentEmotion === 'angry') return CHARACTER_IMAGES.karen.angry;
+      if (currentEmotion === 'serious') return CHARACTER_IMAGES.Speaker2.serious;
+      if (currentEmotion === 'angry') return CHARACTER_IMAGES.Speaker2.angry;
     }
-    return CHARACTER_IMAGES.karen.default;
+    return CHARACTER_IMAGES.Speaker2.default;
   }, [activeSpeaker, currentEmotion]);
 
   // =========================================================================
@@ -743,6 +748,7 @@ export function useDebatePlayer({
     debateTopic,
     searchQueries,
     bufferState,
+    speakerConfig,
     currentTurn,
     activeSpeaker,
     currentEmotion,
@@ -752,7 +758,7 @@ export function useDebatePlayer({
     handleSkipBackward,
     handleQuitDebate,
     handleReplayDebate,
-    getClaireImg,
-    getKarenImg,
+    getSpeaker1Img,
+    getSpeaker2Img,
   };
 }

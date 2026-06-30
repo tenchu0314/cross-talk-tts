@@ -5,7 +5,7 @@
  * および子要素として渡されるフッター（操作・メタ情報・進捗）を表示する。
  */
 
-import type { TurnState } from '../../types';
+import type { TurnState, SpeakerConfig } from '../../types';
 import './DialogueBox.css';
 
 interface DialogueBoxProps {
@@ -13,19 +13,21 @@ interface DialogueBoxProps {
   currentTurn: TurnState | null;
   /** フッター部分のchildren */
   children: React.ReactNode;
+  /** スピーカー表示名設定 */
+  speakerConfig: SpeakerConfig;
 }
 
 /** セリフ表示ボックスコンポーネント */
-export function DialogueBox({ currentTurn, children }: DialogueBoxProps) {
+export function DialogueBox({ currentTurn, children, speakerConfig }: DialogueBoxProps) {
   return (
     <div className="dialogue-window-container">
       <div className="dialogue-box">
         {/* スピーカー名バッジ */}
         {currentTurn && (
           <div
-            className={`speaker-name-badge ${currentTurn.speaker === 'Speaker1' ? 'claire' : 'karen'}`}
+            className={`speaker-name-badge ${currentTurn.speaker === 'Speaker1' ? 'speaker1' : 'speaker2'}`}
           >
-            {currentTurn.speaker === 'Speaker1' ? 'クレア' : 'カレン'}
+            {currentTurn.speaker === 'Speaker1' ? speakerConfig.speaker1Name : speakerConfig.speaker2Name}
           </div>
         )}
 

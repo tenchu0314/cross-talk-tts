@@ -8,15 +8,18 @@
 
 import { useState } from 'react';
 import { CHARACTER_IMAGES, SPEED_OPTIONS, DEFAULT_SPEED } from '../../constants';
+import type { SpeakerConfig } from '../../types';
 import './InputScreen.css';
 
 interface InputScreenProps {
   /** 討論開始コールバック（トピックと速度を渡す） */
   onStartDebate: (topic: string, speed: number) => void;
+  /** スピーカー表示名設定 */
+  speakerConfig: SpeakerConfig;
 }
 
 /** 議題入力画面コンポーネント */
-export function InputScreen({ onStartDebate }: InputScreenProps) {
+export function InputScreen({ onStartDebate, speakerConfig }: InputScreenProps) {
   /** 議題のテキスト */
   const [topic, setTopic] = useState('');
   /** 発話速度 */
@@ -42,15 +45,15 @@ export function InputScreen({ onStartDebate }: InputScreenProps) {
       <form className="setup-form" onSubmit={handleSubmit}>
         {/* キャラクターVSバナー */}
         <div className="setup-vs-banner">
-          {/* クレア（左） */}
-          <div className="vs-character claire">
+          {/* Speaker 1（左） */}
+          <div className="vs-character speaker1">
             <img
               className="vs-avatar"
-              src={CHARACTER_IMAGES.claire.default}
-              alt="Claire"
+              src={CHARACTER_IMAGES.Speaker1.default}
+              alt="Speaker 1"
             />
             <div className="vs-info-overlay">
-              <div className="vs-name">🛡️ クレア</div>
+              <div className="vs-name">🛡️ {speakerConfig.speaker1Name}</div>
               <div className="vs-role">Speaker 1: 論理的JK (データ重視)</div>
             </div>
           </div>
@@ -60,15 +63,15 @@ export function InputScreen({ onStartDebate }: InputScreenProps) {
             <span className="vs-text">VS</span>
           </div>
 
-          {/* カレン（右） */}
-          <div className="vs-character karen">
+          {/* Speaker 2（右） */}
+          <div className="vs-character speaker2">
             <img
               className="vs-avatar"
-              src={CHARACTER_IMAGES.karen.default}
-              alt="Karen"
+              src={CHARACTER_IMAGES.Speaker2.default}
+              alt="Speaker 2"
             />
             <div className="vs-info-overlay">
-              <div className="vs-name">🔥 カレン</div>
+              <div className="vs-name">🔥 {speakerConfig.speaker2Name}</div>
               <div className="vs-role">Speaker 2: ギャル風JK (現場主義)</div>
             </div>
           </div>

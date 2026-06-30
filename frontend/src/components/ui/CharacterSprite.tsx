@@ -10,7 +10,7 @@ import './CharacterSprite.css';
 
 interface CharacterSpriteProps {
   /** キャラクター名（CSSクラスに使用） */
-  character: 'claire' | 'karen';
+  character: 'speaker1' | 'speaker2';
   /** 現在発話中かどうか */
   isActive: boolean;
   /** 現在の感情（表示テキスト用） */

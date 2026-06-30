@@ -47,15 +47,15 @@
   transition: all 0.3s ease;
 }
 
-/* クレアのバッジカラー */
-.speaker-name-badge.claire {
+/* Speaker1のバッジカラー */
+.speaker-name-badge.speaker1 {
   background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
   color: #93c5fd;
   border-color: rgba(147, 197, 253, 0.3);
 }
 
-/* カレンのバッジカラー */
-.speaker-name-badge.karen {
+/* Speaker2のバッジカラー */
+.speaker-name-badge.speaker2 {
   background: linear-gradient(135deg, #7f1d1d 0%, #991b1b 100%);
   color: #fca5a5;
   border-color: rgba(252, 165, 165, 0.3);

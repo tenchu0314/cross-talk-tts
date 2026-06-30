@@ -29,6 +29,7 @@ export function DebatePlayerScreen(props: DebatePlayerScreenProps) {
     debateTopic,
     searchQueries,
     bufferState,
+    speakerConfig,
     currentTurn,
     activeSpeaker,
     currentEmotion,
@@ -37,8 +38,8 @@ export function DebatePlayerScreen(props: DebatePlayerScreenProps) {
     handleSkipBackward,
     handleQuitDebate,
     handleReplayDebate,
-    getClaireImg,
-    getKarenImg,
+    getSpeaker1Img,
+    getSpeaker2Img,
   } = props;
 
   return (
@@ -48,27 +49,27 @@ export function DebatePlayerScreen(props: DebatePlayerScreenProps) {
     >
       {/* キャラクター立ち絵エリア */}
       <div className="characters-stage">
-        {/* クレア（左） */}
+        {/* Speaker 1 (左) */}
         <CharacterSprite
-          character="claire"
+          character="speaker1"
           isActive={activeSpeaker === 'Speaker1'}
           emotion={currentEmotion}
-          imageSrc={getClaireImg()}
-          displayName="クレア"
+          imageSrc={getSpeaker1Img()}
+          displayName={speakerConfig.speaker1Name}
         />
 
-        {/* カレン（右） */}
+        {/* Speaker 2 (右) */}
         <CharacterSprite
-          character="karen"
+          character="speaker2"
           isActive={activeSpeaker === 'Speaker2'}
           emotion={currentEmotion}
-          imageSrc={getKarenImg()}
-          displayName="カレン"
+          imageSrc={getSpeaker2Img()}
+          displayName={speakerConfig.speaker2Name}
         />
       </div>
 
       {/* セリフボックス */}
-      <DialogueBox currentTurn={currentTurn}>
+      <DialogueBox currentTurn={currentTurn} speakerConfig={speakerConfig}>
         {/* フッター: 操作・メタ情報・進捗 */}
         <div className="dialogue-footer">
           {/* 再生操作ボタン */}
