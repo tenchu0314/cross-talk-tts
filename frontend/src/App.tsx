@@ -7,7 +7,7 @@
  */
 
 import { useState, useEffect, useCallback } from 'react';
-import type { ScreenType } from './types';
+import type { ScreenType, SpeakerConfig } from './types';
 import { useDebatePlayer } from './hooks/useDebatePlayer';
 import { HealthCheckScreen } from './components/screens/HealthCheckScreen';
 import { ConnectionErrorScreen } from './components/screens/ConnectionErrorScreen';
@@ -23,6 +23,11 @@ export default function App() {
   const [ttsHealthError, setTtsHealthError] = useState<string>('');
   /** 生成画面のログ */
   const [logs, setLogs] = useState<string[]>([]);
+  /** スピーカー設定 */
+  const [speakerConfig, setSpeakerConfig] = useState<SpeakerConfig>({
+    speaker1Name: 'Speaker1',
+    speaker2Name: 'Speaker2',
+  });
 
   /** ログにメッセージを追加する */
   const addLog = useCallback((message: string) => {
@@ -37,6 +42,7 @@ export default function App() {
     screen,
     onScreenChange: setScreen,
     addLog,
+    speakerConfig,
   });
 
   // =========================================================================
@@ -49,6 +55,16 @@ export default function App() {
     try {
       const res = await fetch('/api/tts/health');
       if (res.ok) {
+        // Also fetch speaker config
+        try {
+          const configRes = await fetch('/api/config');
+          if (configRes.ok) {
+            const configData = await configRes.json();
+            setSpeakerConfig(configData);
+          }
+        } catch (err) {
+          console.error('Failed to load speaker configuration:', err);
+        }
         setScreen('input');
         setTtsHealthError('');
       } else {
@@ -94,7 +110,7 @@ export default function App() {
       )}
 
       {screen === 'input' && (
-        <InputScreen onStartDebate={handleStartDebate} />
+        <InputScreen onStartDebate={handleStartDebate} speakerConfig={speakerConfig} />
       )}
 
       {screen === 'generating' && <GeneratingScreen logs={logs} />}

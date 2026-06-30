@@ -133,12 +133,12 @@
   height: 100%;
 }
 
-.vs-character.claire {
+.vs-character.speaker1 {
   background: linear-gradient(90deg, rgba(30, 58, 138, 0.25) 0%, rgba(10, 12, 18, 0) 100%);
   border-right: 1px dashed rgba(255, 255, 255, 0.06);
 }
 
-.vs-character.karen {
+.vs-character.speaker2 {
   background: linear-gradient(270deg, rgba(127, 29, 29, 0.25) 0%, rgba(10, 12, 18, 0) 100%);
   border-left: 1px dashed rgba(255, 255, 255, 0.06);
 }
@@ -159,16 +159,16 @@
   transform: scale(1.04) translateY(2px);
 }
 
-.vs-character.claire .vs-avatar {
+.vs-character.speaker1 .vs-avatar {
   left: 5%;
 }
 
-.vs-character.karen .vs-avatar {
+.vs-character.speaker2 .vs-avatar {
   right: 5%;
   transform: scaleX(-1);
 }
 
-.vs-character.karen:hover .vs-avatar {
+.vs-character.speaker2:hover .vs-avatar {
   transform: scale(-1.04, 1.04) translateY(2px);
 }
 
@@ -186,12 +186,12 @@
   pointer-events: none;
 }
 
-.vs-character.claire .vs-info-overlay {
+.vs-character.speaker1 .vs-info-overlay {
   align-items: flex-start;
   padding-left: 30%;
 }
 
-.vs-character.karen .vs-info-overlay {
+.vs-character.speaker2 .vs-info-overlay {
   align-items: flex-end;
   padding-right: 30%;
 }
@@ -203,12 +203,12 @@
   letter-spacing: 0.02em;
 }
 
-.vs-character.claire .vs-name {
-  color: var(--claire-color);
+.vs-character.speaker1 .vs-name {
+  color: var(--speaker1-color);
 }
 
-.vs-character.karen .vs-name {
-  color: var(--karen-color);
+.vs-character.speaker2 .vs-name {
+  color: var(--speaker2-color);
 }
 
 .vs-role {

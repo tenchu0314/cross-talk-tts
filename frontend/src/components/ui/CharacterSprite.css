@@ -93,12 +93,12 @@
   transform: scale(1.03) translateY(-10px);
 }
 
-.character-sprite-container.claire.active .character-placeholder-name {
-  color: var(--claire-color);
+.character-sprite-container.speaker1.active .character-placeholder-name {
+  color: var(--speaker1-color);
 }
 
-.character-sprite-container.karen.active .character-placeholder-name {
-  color: var(--karen-color);
+.character-sprite-container.speaker2.active .character-placeholder-name {
+  color: var(--speaker2-color);
 }
 
 /* レスポンシブ対応 */

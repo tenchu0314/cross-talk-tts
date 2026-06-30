@@ -7,15 +7,15 @@
 
 /** キャラクター画像パス */
 export const CHARACTER_IMAGES = {
-  claire: {
-    default: '/assets/claire_default.png',
-    serious: '/assets/claire_serious.png',
-    angry: '/assets/claire_angry.png',
+  Speaker1: {
+    default: '/assets/speaker1_default.png',
+    serious: '/assets/speaker1_serious.png',
+    angry: '/assets/speaker1_angry.png',
   },
-  karen: {
-    default: '/assets/karen_default.png',
-    serious: '/assets/karen_serious.png',
-    angry: '/assets/karen_angry.png',
+  Speaker2: {
+    default: '/assets/speaker2_default.png',
+    serious: '/assets/speaker2_serious.png',
+    angry: '/assets/speaker2_angry.png',
   },
 } as const;
 

@@ -42,6 +42,14 @@ app.get('/api/tts/health', async (req: Request, res: Response): Promise<void> =>
   }
 });
 
+// Get Speaker Configuration
+app.get('/api/config', (req: Request, res: Response): void => {
+  res.json({
+    speaker1Name: process.env.SPEAKER1_NAME || 'Speaker1',
+    speaker2Name: process.env.SPEAKER2_NAME || 'Speaker2',
+  });
+});
+
 // Debate Script Generator via Gemini API
 app.post('/api/debate', async (req: Request, res: Response): Promise<void> => {
   const { topic } = req.body;
@@ -56,9 +64,9 @@ app.post('/api/debate', async (req: Request, res: Response): Promise<void> => {
     return;
   }
 
-  const speaker1Name = process.env.SPEAKER1_NAME || 'クレア';
+  const speaker1Name = process.env.SPEAKER1_NAME || 'Speaker1';
   const speaker1Prompt = process.env.SPEAKER1_PROMPT || '';
-  const speaker2Name = process.env.SPEAKER2_NAME || 'カレン';
+  const speaker2Name = process.env.SPEAKER2_NAME || 'Speaker2';
   const speaker2Prompt = process.env.SPEAKER2_PROMPT || '';
 
   const systemPrompt = `
