@@ -62,7 +62,9 @@ export interface DebatePlayerState {
 
   // --- 操作関数 ---
   /** 討論を開始する */
-  startDebate: (topic: string, speed: number) => Promise<void>;
+  startDebate: (topic: string, speed: number, hideUI: boolean) => Promise<void>;
+  /** UIを非表示にするか（画面録画モード） */
+  hideUI: boolean;
   /** 再生/一時停止を切り替える */
   handlePlayPause: () => void;
   /** 次のターンへスキップ */
@@ -106,6 +108,8 @@ export function useDebatePlayer({
   const [isBuffering, setIsBuffering] = useState(false);
   /** 討論終了フラグ */
   const [isDebateFinished, setIsDebateFinished] = useState(false);
+  /** UIを非表示にするか（画面録画モード） */
+  const [hideUI, setHideUI] = useState(false);
   /** 平均TTS生成速度（秒/文字） */
   const [averageSpeed, setAverageSpeed] = useState<number | null>(null);
   /** 発話速度 */
@@ -545,11 +549,12 @@ export function useDebatePlayer({
    * APIから台本を取得し、TTS音声の生成キューを開始する
    */
   const startDebate = useCallback(
-    async (topic: string, speed: number) => {
+    async (topic: string, speed: number, hideUI: boolean) => {
       const sessionId = Date.now();
       debateSessionRef.current = sessionId;
 
       setSpeed(speed);
+      setHideUI(hideUI);
       onScreenChange('generating');
       addLog('Gemini API を呼び出し中...');
       addLog('議題の検証とWeb検索クエリの作成を行っています...');
@@ -749,6 +754,7 @@ export function useDebatePlayer({
     searchQueries,
     bufferState,
     speakerConfig,
+    hideUI,
     currentTurn,
     activeSpeaker,
     currentEmotion,
