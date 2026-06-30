@@ -1,0 +1,35 @@
+/* DebatePlayerScreen.css — ADV討論再生画面のスタイル */
+
+.adv-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  transition: background-image 0.5s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+/* 暗いオーバーレイ（コントラスト向上） */
+.adv-screen::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    180deg,
+    rgba(10, 12, 16, 0.4) 0%,
+    rgba(10, 12, 16, 0) 50%,
+    rgba(10, 12, 16, 0.85) 100%
+  );
+  pointer-events: none;
+  z-index: 1;
+}

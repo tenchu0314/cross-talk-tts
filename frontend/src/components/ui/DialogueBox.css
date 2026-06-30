@@ -1,0 +1,164 @@
+/* DialogueBox.css — セリフ表示ボックスのスタイル */
+
+/* セリフボックスのコンテナ（画面下部に固定） */
+.dialogue-window-container {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  z-index: 5;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* セリフボックス本体 */
+.dialogue-box {
+  background: rgba(9, 11, 16, 0.94);
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  border-left: none;
+  border-right: none;
+  border-bottom: none;
+  border-radius: 24px 24px 0 0;
+  padding: 2.2rem 8% 1.8rem 8%;
+  min-height: 230px;
+  position: relative;
+  box-shadow: 0 -15px 40px rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(25px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* スピーカー名バッジ */
+.speaker-name-badge {
+  position: absolute;
+  top: -22px;
+  left: 8%;
+  padding: 0.6rem 2.5rem;
+  font-family: var(--font-title);
+  font-size: 1.15rem;
+  font-weight: 700;
+  border-radius: 12px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.7);
+  z-index: 6;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  letter-spacing: 0.05em;
+  transition: all 0.3s ease;
+}
+
+/* クレアのバッジカラー */
+.speaker-name-badge.claire {
+  background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+  color: #93c5fd;
+  border-color: rgba(147, 197, 253, 0.3);
+}
+
+/* カレンのバッジカラー */
+.speaker-name-badge.karen {
+  background: linear-gradient(135deg, #7f1d1d 0%, #991b1b 100%);
+  color: #fca5a5;
+  border-color: rgba(252, 165, 165, 0.3);
+}
+
+/* セリフテキスト */
+.dialogue-text {
+  font-size: 1.25rem;
+  color: var(--text-main);
+  margin-top: 0.5rem;
+  line-height: 1.7;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+}
+
+/* フッター: 操作とメタ情報のグリッドレイアウト */
+.dialogue-footer {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto auto;
+  gap: 1.2rem;
+  margin-top: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  padding-top: 1rem;
+}
+
+/* 議題と終了ボタンのメタパネル */
+.dialogue-meta-panel {
+  grid-column: 2;
+  grid-row: 1;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  border: none;
+}
+
+/* 議題表示コンテナ */
+.debate-topic-container {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  max-width: 80%;
+  overflow: hidden;
+}
+
+/* 議題ラベル */
+.debate-topic-label {
+  font-family: var(--font-title);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-main);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 検索クエリタグ */
+.search-queries-tag {
+  font-size: 0.75rem;
+  color: #34d399;
+  background: rgba(52, 211, 153, 0.1);
+  padding: 0.2rem 0.6rem;
+  border-radius: 20px;
+  border: 1px solid rgba(52, 211, 153, 0.2);
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+/* 討論終了ボタン */
+.close-debate-btn {
+  background: rgba(239, 68, 68, 0.08);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  color: #fca5a5;
+  padding: 0.35rem 0.9rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.close-debate-btn:hover {
+  background: rgba(239, 68, 68, 0.22);
+  border-color: rgba(239, 68, 68, 0.4);
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.15);
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
+  .dialogue-box {
+    padding: 1.8rem 5% 1.2rem 5%;
+    min-height: 200px;
+  }
+
+  .speaker-name-badge {
+    left: 5%;
+    padding: 0.4rem 1.5rem;
+  }
+}

@@ -1,0 +1,5 @@
+/* HealthCheckScreen.css — TTS接続確認画面のスタイル */
+/* 注: スピナーとローディング画面の基本スタイルはApp.cssのグローバルスタイルを使用 */
+
+/* このファイルはHealthCheckScreen固有のスタイルを追加する場合に使用する */
+/* 現在はグローバルの .loading-screen, .loading-spinner 等を共有 */
