@@ -11,10 +11,6 @@ import type { TurnState, DebateData, ScreenType, BufferState, SpeakerConfig } fr
 import {
   MAX_CONCURRENT_REQUESTS,
   AUDIO_LOAD_TIMEOUT_MS,
-  DEFAULT_ESTIMATED_SPEED,
-  BUFFER_SAFETY_MARGIN,
-  MIN_BUFFER_TURNS,
-  BUFFER_PERCENT_THRESHOLD,
   CHARACTER_IMAGES,
 } from '../constants';
 
@@ -51,6 +47,10 @@ export interface DebatePlayerState {
   bufferState: BufferState;
   /** スピーカー表示名設定 */
   speakerConfig: SpeakerConfig;
+  /** 動画撮影モード開始時のディレイ中フラグ */
+  isDelayingStart: boolean;
+  /** 動画撮影モード開始時のフェードアウト中フラグ */
+  isFadingOutTitle: boolean;
 
   // --- 現在のターン情報（派生値） ---
   /** 現在のターンオブジェクト（nullは再生前） */
@@ -62,9 +62,9 @@ export interface DebatePlayerState {
 
   // --- 操作関数 ---
   /** 討論を開始する */
-  startDebate: (topic: string, speed: number, hideUI: boolean) => Promise<void>;
-  /** UIを非表示にするか（画面録画モード） */
-  hideUI: boolean;
+  startDebate: (topic: string, speed: number, isVideoRecordingMode: boolean) => Promise<void>;
+  /** 動画撮影モード（UI非表示・GPU負荷軽減）にするか */
+  isVideoRecordingMode: boolean;
   /** 再生/一時停止を切り替える */
   handlePlayPause: () => void;
   /** 次のターンへスキップ */
@@ -108,12 +108,15 @@ export function useDebatePlayer({
   const [isBuffering, setIsBuffering] = useState(false);
   /** 討論終了フラグ */
   const [isDebateFinished, setIsDebateFinished] = useState(false);
-  /** UIを非表示にするか（画面録画モード） */
-  const [hideUI, setHideUI] = useState(false);
+  /** 動画撮影モード（UI非表示・GPU負荷軽減）にするか */
+  const [isVideoRecordingMode, setIsVideoRecordingMode] = useState(false);
   /** 平均TTS生成速度（秒/文字） */
-  const [averageSpeed, setAverageSpeed] = useState<number | null>(null);
   /** 発話速度 */
   const [speed, setSpeed] = useState<number>(1.3);
+  /** 動画撮影モード開始時のディレイ中フラグ */
+  const [isDelayingStart, setIsDelayingStart] = useState(false);
+  /** 動画撮影モード開始時のフェードアウト中フラグ */
+  const [isFadingOutTitle, setIsFadingOutTitle] = useState(false);
 
   // =========================================================================
   // Ref（非同期処理のクロージャ問題を避けるための参照）
@@ -368,8 +371,7 @@ export function useDebatePlayer({
     });
 
     // 秒/文字 の平均生成速度
-    const avgSpeed = totalGenTimeMs / 1000 / totalChars;
-    setAverageSpeed(avgSpeed);
+    // no-op (averageSpeed is no longer used)
   }, []);
 
   // =========================================================================
@@ -382,72 +384,33 @@ export function useDebatePlayer({
    */
   const getBufferState = useCallback((): BufferState => {
     const currentTurns = turns;
-    const currentIdx = currentIndex;
-
     const totalTurns = currentTurns.length;
     if (totalTurns === 0) return { canPlay: false, msg: '台本準備中...' };
 
-    const ungeneratedTurns = currentTurns.filter(
+    const ungeneratedCount = currentTurns.filter(
       (t) => t.status === 'pending' || t.status === 'loading'
-    );
+    ).length;
+    const readyCount = totalTurns - ungeneratedCount;
 
-    // 全ターンが生成済み or エラーなら再生可能
-    if (ungeneratedTurns.length === 0) {
-      return { canPlay: true, msg: 'すべての音声生成完了' };
-    }
-
-    // 未生成ターンの合計文字数
-    const remainingCharsToGenerate = ungeneratedTurns.reduce(
-      (sum, t) => sum + t.text.length,
-      0
-    );
-
-    // 平均速度が未算出の場合は、最低2ターン分の生成を待つ
-    const readyCount = currentTurns.filter((t) => t.status === 'ready').length;
-    if (readyCount < MIN_BUFFER_TURNS && averageSpeed === null) {
+    if (isVideoRecordingMode) {
+      const isAllGenerated = ungeneratedCount === 0;
       return {
-        canPlay: false,
-        msg: `初期バッファ生成中 (${readyCount}/${MIN_BUFFER_TURNS})...`,
+        canPlay: isAllGenerated,
+        msg: isAllGenerated
+          ? 'すべての音声生成完了'
+          : `動画撮影モード: 音声生成中 (${readyCount}/${totalTurns})...`,
+      };
+    } else {
+      const requiredTurns = Math.min(2, totalTurns);
+      const isReady = readyCount >= requiredTurns;
+      return {
+        canPlay: isReady,
+        msg: isReady
+          ? '再生準備完了（バックグラウンドで残りを生成中）'
+          : `初期バッファ生成中 (${readyCount}/${requiredTurns})...`,
       };
     }
-
-    const speed = averageSpeed || DEFAULT_ESTIMATED_SPEED;
-    const estimatedGenTimeRemaining = remainingCharsToGenerate * speed;
-
-    // 現在位置以降のバッファ済み再生時間を合計
-    let bufferedPlaytimeRemaining = 0;
-    currentTurns.forEach((t, i) => {
-      if (i >= currentIdx && t.status === 'ready' && t.duration) {
-        bufferedPlaytimeRemaining += t.duration;
-      }
-    });
-
-    // 再生中の音声の残り時間を加算
-    if (isPlaying && audioRef.current) {
-      const currentRemaining =
-        audioRef.current.duration - audioRef.current.currentTime;
-      if (!isNaN(currentRemaining)) {
-        bufferedPlaytimeRemaining += currentRemaining;
-      }
-    }
-
-    // バッファ条件: バッファ再生時間 >= 推定生成時間 × 安全マージン
-    const canPlay =
-      bufferedPlaytimeRemaining >= estimatedGenTimeRemaining * BUFFER_SAFETY_MARGIN;
-
-    // 代替条件: 50%以上のターンが準備済みなら開始可能
-    const percentReady = (readyCount / totalTurns) * 100;
-    const metPercentThreshold = percentReady >= BUFFER_PERCENT_THRESHOLD;
-
-    const resultCanPlay = canPlay || metPercentThreshold;
-
-    return {
-      canPlay: resultCanPlay,
-      msg: resultCanPlay
-        ? '再生準備完了（バックグラウンドで残りを生成中）'
-        : `バッファ蓄積中... (再生プール: ${Math.round(bufferedPlaytimeRemaining)}秒 / 必要生成: ${Math.round(estimatedGenTimeRemaining)}秒)`,
-    };
-  }, [turns, currentIndex, isPlaying, averageSpeed]);
+  }, [turns, isVideoRecordingMode]);
 
   const bufferState = getBufferState();
 
@@ -457,10 +420,27 @@ export function useDebatePlayer({
 
   useEffect(() => {
     if (screen === 'adv' && currentIndex === -1 && bufferState.canPlay) {
-      setCurrentIndex(0);
-      setIsPlaying(true);
+      if (isVideoRecordingMode) {
+        setIsDelayingStart(true);
+        const fadeTimer = setTimeout(() => {
+          setIsFadingOutTitle(true);
+        }, 1000);
+        const startTimer = setTimeout(() => {
+          setCurrentIndex(0);
+          setIsPlaying(true);
+          setIsDelayingStart(false);
+          setIsFadingOutTitle(false);
+        }, 2000);
+        return () => {
+          clearTimeout(fadeTimer);
+          clearTimeout(startTimer);
+        };
+      } else {
+        setCurrentIndex(0);
+        setIsPlaying(true);
+      }
     }
-  }, [bufferState.canPlay, screen, currentIndex]);
+  }, [bufferState.canPlay, screen, currentIndex, isVideoRecordingMode]);
 
   // =========================================================================
   // 音声再生・バッファリング制御
@@ -549,12 +529,12 @@ export function useDebatePlayer({
    * APIから台本を取得し、TTS音声の生成キューを開始する
    */
   const startDebate = useCallback(
-    async (topic: string, speed: number, hideUI: boolean) => {
+    async (topic: string, speed: number, isVideoRecordingMode: boolean) => {
       const sessionId = Date.now();
       debateSessionRef.current = sessionId;
 
       setSpeed(speed);
-      setHideUI(hideUI);
+      setIsVideoRecordingMode(isVideoRecordingMode);
       onScreenChange('generating');
       addLog('Gemini API を呼び出し中...');
       addLog('議題の検証とWeb検索クエリの作成を行っています...');
@@ -594,7 +574,7 @@ export function useDebatePlayer({
 
         setTurns(initialTurns);
         turnsRef.current = initialTurns;
-        setAverageSpeed(null);
+        // averageSpeed is no longer used
         setCurrentIndex(-1);
         setIsPlaying(false);
         setIsBuffering(false);
@@ -691,6 +671,8 @@ export function useDebatePlayer({
     setIsPlaying(false);
     setIsBuffering(false);
     setIsDebateFinished(false);
+    setIsDelayingStart(false);
+    setIsFadingOutTitle(false);
     setSearchQueries([]);
     setDebateTopic('');
 
@@ -754,7 +736,9 @@ export function useDebatePlayer({
     searchQueries,
     bufferState,
     speakerConfig,
-    hideUI,
+    isDelayingStart,
+    isFadingOutTitle,
+    isVideoRecordingMode,
     currentTurn,
     activeSpeaker,
     currentEmotion,

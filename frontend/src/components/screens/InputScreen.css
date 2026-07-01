@@ -248,8 +248,8 @@
   text-shadow: 0 0 10px rgba(225, 29, 72, 0.5);
 }
 
-/* --- UIを非表示チェックボックス（録画モード） --- */
-.hide-ui-label {
+/* --- 動画撮影モードチェックボックス --- */
+.video-recording-mode-label {
   display: inline-flex;
   align-items: center;
   gap: 0.75rem;
@@ -263,13 +263,13 @@
   width: fit-content;
 }
 
-.hide-ui-label:hover {
+.video-recording-mode-label:hover {
   border-color: rgba(88, 101, 242, 0.4);
   background: rgba(88, 101, 242, 0.06);
 }
 
 /* ネイティブcheckboxを非表示 */
-.hide-ui-checkbox {
+.video-recording-mode-checkbox {
   position: absolute;
   opacity: 0;
   width: 0;
@@ -277,7 +277,7 @@
 }
 
 /* カスタムチェックボックス */
-.hide-ui-checkmark {
+.video-recording-mode-checkmark {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -290,13 +290,13 @@
   transition: all 0.2s ease;
 }
 
-.hide-ui-checkbox:checked + .hide-ui-checkmark {
+.video-recording-mode-checkbox:checked + .video-recording-mode-checkmark {
   background: var(--accent-color);
   border-color: var(--accent-color);
   box-shadow: 0 0 8px rgba(88, 101, 242, 0.5);
 }
 
-.hide-ui-checkbox:checked + .hide-ui-checkmark::after {
+.video-recording-mode-checkbox:checked + .video-recording-mode-checkmark::after {
   content: '';
   display: block;
   width: 5px;
@@ -307,13 +307,13 @@
   transform: rotate(45deg) translateY(-1px);
 }
 
-.hide-ui-text {
+.video-recording-mode-text {
   font-size: 0.9rem;
   font-weight: 500;
   color: var(--text-muted);
   transition: color 0.2s ease;
 }
 
-.hide-ui-label:has(.hide-ui-checkbox:checked) .hide-ui-text {
+.video-recording-mode-label:has(.video-recording-mode-checkbox:checked) .video-recording-mode-text {
   color: var(--text-main);
 }
