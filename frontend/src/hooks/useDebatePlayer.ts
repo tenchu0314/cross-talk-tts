@@ -24,6 +24,8 @@ interface UseDebatePlayerArgs {
   addLog: (message: string) => void;
   /** スピーカー表示名設定 */
   speakerConfig: SpeakerConfig;
+  /** 討論台本生成完了コールバック */
+  onDebateCreated?: (data: DebateData) => void;
 }
 
 /** Hookの返り値の型 */
@@ -63,6 +65,8 @@ export interface DebatePlayerState {
   // --- 操作関数 ---
   /** 討論を開始する */
   startDebate: (topic: string, speed: number, isVideoRecordingMode: boolean) => Promise<void>;
+  /** 保存された台本データから討論を開始する */
+  startDebateWithData: (data: DebateData, speed: number, isVideoRecordingMode: boolean) => void;
   /** 動画撮影モード（UI非表示・GPU負荷軽減）にするか */
   isVideoRecordingMode: boolean;
   /** 再生/一時停止を切り替える */
@@ -89,6 +93,7 @@ export function useDebatePlayer({
   onScreenChange,
   addLog,
   speakerConfig,
+  onDebateCreated,
 }: UseDebatePlayerArgs): DebatePlayerState {
   // =========================================================================
   // 状態管理
@@ -552,6 +557,9 @@ export function useDebatePlayer({
         }
 
         const data: DebateData = await response.json();
+        if (onDebateCreated) {
+          onDebateCreated(data);
+        }
         addLog('討論台本の生成が完了しました！');
         addLog(`総ターン数: ${data.turns.length} ターン`);
 
@@ -588,6 +596,49 @@ export function useDebatePlayer({
         alert(`エラーが発生しました: ${message}`);
         onScreenChange('input');
       }
+    },
+    [addLog, onScreenChange, startTtsQueue]
+  );
+
+  /**
+   * 保存された台本データから討論を開始する
+   */
+  const startDebateWithData = useCallback(
+    (data: DebateData, speed: number, isVideoRecordingMode: boolean) => {
+      const sessionId = Date.now();
+      debateSessionRef.current = sessionId;
+
+      setSpeed(speed);
+      setIsVideoRecordingMode(isVideoRecordingMode);
+      onScreenChange('generating');
+      addLog('保存された討論履歴から台本を読み込み中...');
+
+      if (data.search_queries && data.search_queries.length > 0) {
+        addLog(`Web検索キーワード: ${data.search_queries.join(', ')}`);
+        setSearchQueries(data.search_queries);
+      } else {
+        setSearchQueries([]);
+      }
+
+      setDebateTopic(data.topic);
+
+      // ターン状態を初期化
+      const initialTurns: TurnState[] = data.turns.map((t) => ({
+        ...t,
+        audioUrl: null,
+        duration: null,
+        status: 'pending',
+      }));
+
+      setTurns(initialTurns);
+      turnsRef.current = initialTurns;
+      setCurrentIndex(-1);
+      setIsPlaying(false);
+      setIsBuffering(false);
+      onScreenChange('adv');
+
+      // TTS生成キューを開始
+      startTtsQueue(initialTurns, sessionId);
     },
     [addLog, onScreenChange, startTtsQueue]
   );
@@ -758,6 +809,7 @@ export function useDebatePlayer({
     activeSpeaker,
     currentEmotion,
     startDebate,
+    startDebateWithData,
     handlePlayPause,
     handleSkipForward,
     handleSkipBackward,

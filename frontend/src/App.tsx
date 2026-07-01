@@ -7,7 +7,7 @@
  */
 
 import { useState, useEffect, useCallback } from 'react';
-import type { ScreenType, SpeakerConfig } from './types';
+import type { ScreenType, SpeakerConfig, DebateData, HistoryItem } from './types';
 import { useDebatePlayer } from './hooks/useDebatePlayer';
 import { HealthCheckScreen } from './components/screens/HealthCheckScreen';
 import { ConnectionErrorScreen } from './components/screens/ConnectionErrorScreen';
@@ -43,6 +43,24 @@ export default function App() {
     onScreenChange: setScreen,
     addLog,
     speakerConfig,
+    onDebateCreated: (data) => {
+      try {
+        const stored = localStorage.getItem('cross_talk_debate_history');
+        const historyList: HistoryItem[] = stored ? JSON.parse(stored) : [];
+        const newItem: HistoryItem = {
+          id: Date.now().toString(),
+          topic: data.topic,
+          data,
+          timestamp: Date.now(),
+        };
+        localStorage.setItem(
+          'cross_talk_debate_history',
+          JSON.stringify([newItem, ...historyList])
+        );
+      } catch (err) {
+        console.error('Failed to save debate history:', err);
+      }
+    },
   });
 
   // =========================================================================
@@ -87,11 +105,15 @@ export default function App() {
 
   /** 討論開始時にログをリセットしてHookに委譲 */
   const handleStartDebate = useCallback(
-    (topic: string, speed: number, isVideoRecordingMode: boolean) => {
+    (topicOrData: string | DebateData, speed: number, isVideoRecordingMode: boolean) => {
       setLogs([]);
-      player.startDebate(topic, speed, isVideoRecordingMode);
+      if (typeof topicOrData === 'string') {
+        player.startDebate(topicOrData, speed, isVideoRecordingMode);
+      } else {
+        player.startDebateWithData(topicOrData, speed, isVideoRecordingMode);
+      }
     },
-    [player.startDebate]
+    [player.startDebate, player.startDebateWithData]
   );
 
   // =========================================================================
