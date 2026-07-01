@@ -1,7 +1,7 @@
 /**
- * BufferingTitleOverlay.tsx — UI非表示モード用のバッファリング画面（映画のタイトル風）
+ * BufferingTitleOverlay.tsx — 動画撮影モード用のバッファリング画面（映画のタイトル風）
  *
- * UIを隠すモードのときのみ、バッファ中に画面全体を薄暗くし、
+ * 動画撮影モードのときのみ、バッファ中に画面全体を薄暗くし、
  * 中央に可変フォントサイズで討論のテーマを表示する。
  */
 
@@ -10,11 +10,13 @@ import './BufferingTitleOverlay.css';
 interface BufferingTitleOverlayProps {
   /** 討論テーマ */
   debateTopic: string;
+  /** フェードアウト中か */
+  isFadeOut?: boolean;
 }
 
-export function BufferingTitleOverlay({ debateTopic }: BufferingTitleOverlayProps) {
+export function BufferingTitleOverlay({ debateTopic, isFadeOut }: BufferingTitleOverlayProps) {
   return (
-    <div className="buffering-title-overlay">
+    <div className={`buffering-title-overlay ${isFadeOut ? 'fade-out' : ''}`}>
       <div className="title-card-container">
         {/* 上部の小さなラベル */}
         <span className="title-card-subtitle">DEBATE THEME</span>

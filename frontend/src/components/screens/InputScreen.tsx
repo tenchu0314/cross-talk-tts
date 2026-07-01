@@ -12,8 +12,8 @@ import type { SpeakerConfig } from '../../types';
 import './InputScreen.css';
 
 interface InputScreenProps {
-  /** 討論開始コールバック（トピックと速度、UIhideフラグを渡す） */
-  onStartDebate: (topic: string, speed: number, hideUI: boolean) => void;
+  /** 討論開始コールバック（トピックと速度、動画撮影モードフラグを渡す） */
+  onStartDebate: (topic: string, speed: number, isVideoRecordingMode: boolean) => void;
   /** スピーカー表示名設定 */
   speakerConfig: SpeakerConfig;
 }
@@ -24,14 +24,14 @@ export function InputScreen({ onStartDebate, speakerConfig }: InputScreenProps) 
   const [topic, setTopic] = useState('');
   /** 発話速度 */
   const [speed, setSpeed] = useState<number>(DEFAULT_SPEED);
-  /** UIを非表示にするか（画面録画モード） */
-  const [hideUI, setHideUI] = useState(false);
+  /** 動画撮影モード（UI非表示・GPU負荷軽減）にするか */
+  const [isVideoRecordingMode, setIsVideoRecordingMode] = useState(false);
 
   /** フォーム送信ハンドラ */
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!topic.trim()) return;
-    onStartDebate(topic, speed, hideUI);
+    onStartDebate(topic, speed, isVideoRecordingMode);
   };
 
   return (
@@ -114,17 +114,17 @@ export function InputScreen({ onStartDebate, speakerConfig }: InputScreenProps) 
           </select>
         </div>
 
-        {/* UIを非表示チェックボックス（録画モード） */}
-        <label className="hide-ui-label" htmlFor="hide-ui-checkbox">
+        {/* 動画撮影モードチェックボックス */}
+        <label className="video-recording-mode-label" htmlFor="video-recording-mode-checkbox">
           <input
-            id="hide-ui-checkbox"
-            className="hide-ui-checkbox"
+            id="video-recording-mode-checkbox"
+            className="video-recording-mode-checkbox"
             type="checkbox"
-            checked={hideUI}
-            onChange={(e) => setHideUI(e.target.checked)}
+            checked={isVideoRecordingMode}
+            onChange={(e) => setIsVideoRecordingMode(e.target.checked)}
           />
-          <span className="hide-ui-checkmark" />
-          <span className="hide-ui-text">UIを非表示</span>
+          <span className="video-recording-mode-checkmark" />
+          <span className="video-recording-mode-text">動画撮影モード</span>
         </label>
 
         {/* 開始ボタン */}

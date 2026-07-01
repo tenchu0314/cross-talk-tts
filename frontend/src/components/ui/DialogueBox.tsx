@@ -33,7 +33,7 @@ export function DialogueBox({ currentTurn, children, speakerConfig }: DialogueBo
 
         {/* セリフテキスト */}
         <div className="dialogue-text">
-          {currentTurn ? currentTurn.text : '討論の開始を待っています...'}
+          {currentTurn ? currentTurn.text : ''}
         </div>
 
         {/* フッター: 操作ボタン・メタ情報・進捗バー */}

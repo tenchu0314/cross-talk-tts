@@ -87,9 +87,9 @@ export default function App() {
 
   /** 討論開始時にログをリセットしてHookに委譲 */
   const handleStartDebate = useCallback(
-    (topic: string, speed: number, hideUI: boolean) => {
+    (topic: string, speed: number, isVideoRecordingMode: boolean) => {
       setLogs([]);
-      player.startDebate(topic, speed, hideUI);
+      player.startDebate(topic, speed, isVideoRecordingMode);
     },
     [player.startDebate]
   );

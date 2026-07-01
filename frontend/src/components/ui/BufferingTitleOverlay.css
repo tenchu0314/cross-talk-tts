@@ -1,4 +1,4 @@
-/* BufferingTitleOverlay.css — UI非表示モード用バッファリング画面のスタイル */
+/* BufferingTitleOverlay.css — 動画撮影モード用バッファリング画面のスタイル */
 
 .buffering-title-overlay {
   position: fixed;
@@ -97,5 +97,23 @@
     opacity: 1;
     transform: scaleX(1.3);
     box-shadow: 0 0 15px rgba(88, 101, 242, 0.6);
+  }
+}
+
+.buffering-title-overlay.fade-out {
+  animation: fadeOutOverlay 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  pointer-events: none;
+}
+
+@keyframes fadeOutOverlay {
+  from {
+    opacity: 1;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+  to {
+    opacity: 0;
+    backdrop-filter: blur(0px);
+    -webkit-backdrop-filter: blur(0px);
   }
 }
