@@ -14,7 +14,7 @@
 
 /* セリフボックス本体 */
 .dialogue-box {
-  background: rgba(9, 11, 16, 0.94);
+  background: rgba(9, 11, 16, 0.3);
   border-top: 1px solid rgba(255, 255, 255, 0.12);
   border-left: none;
   border-right: none;
@@ -23,8 +23,8 @@
   padding: 2.2rem 8% 1.8rem 8%;
   min-height: 230px;
   position: relative;
-  box-shadow: 0 -15px 40px rgba(0, 0, 0, 0.85);
-  backdrop-filter: blur(25px);
+  box-shadow: 0 -15px 40px rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(3px);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -69,6 +69,7 @@
   line-height: 1.7;
   font-weight: 400;
   letter-spacing: 0.02em;
+  text-shadow: 0px 1px 3px #121212;
 }
 
 /* フッター: 操作とメタ情報のグリッドレイアウト */
@@ -115,6 +116,7 @@
   overflow: hidden;
   text-wrap: wrap;
   text-overflow: ellipsis;
+  text-shadow: 0 1px 3px #121212;
 }
 
 /* 検索クエリタグ */
