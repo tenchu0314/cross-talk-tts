@@ -69,6 +69,14 @@ app.post('/api/debate', async (req: Request, res: Response): Promise<void> => {
   const speaker2Name = process.env.SPEAKER2_NAME || 'Speaker2';
   const speaker2Prompt = process.env.SPEAKER2_PROMPT || '';
 
+  // 討論ルールの文章全体。DEBATE_RULES が設定されていればそちらを使う。
+  const defaultDebateRules = `
+1. 討論はフリートークではなく、議題に対する本格的な討論としてください。
+2. 客観的で正確な討論にするため、必ず検索機能（Google Search Grounding）を利用して、データや論拠となる情報を取得・引用してください。
+3. 2人は交互に話します。議論が深まるように、お互いの主張に論理的かつ説得力のある応答をさせてください。
+4. 会話は可能な限り長く（各発言者が最低4〜5回発言するよう、合計8〜10ターン以上）作成してください。`;
+  const rulesText = process.env.DEBATE_RULES || defaultDebateRules;
+
   const systemPrompt = `
 あなたは討論の台本を生成するアシスタントです。
 以下の議題に基づいて、2人のキャラクター（Speaker1: ${speaker1Name}, Speaker2: ${speaker2Name}）による対談形式の討論台本を作成してください。
@@ -80,10 +88,7 @@ app.post('/api/debate', async (req: Request, res: Response): Promise<void> => {
 - Speaker2 (${speaker2Name}): ${speaker2Prompt}
 
 討論ルール:
-1. 討論はフリートークではなく、議題に対する本格的な討論としてください。
-2. 客観的で正確な討論にするため、必ず検索機能（Google Search Grounding）を利用して、データや論拠となる情報を取得・引用してください。
-3. 2人は交互に話します。議論が深まるように、お互いの主張に論理的かつ説得力のある応答をさせてください。
-4. 会話は可能な限り長く（各発言者が最低4〜5回発言するよう、合計8〜10ターン以上）作成してください。
+${rulesText}
 
 出力形式:
 以下のフォーマットのように、発言者、発言時の感情(emotion: default / serious / angry のいずれか)、発言名、そして発言内容を記述してください。
