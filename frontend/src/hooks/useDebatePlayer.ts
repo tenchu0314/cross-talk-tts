@@ -704,23 +704,38 @@ export function useDebatePlayer({
   const activeSpeaker = currentTurn?.speaker || null;
   const currentEmotion = currentTurn?.emotion || 'default';
 
+  /** 指定されたスピーカーの最新の感情を取得する */
+  const getLatestEmotion = useCallback(
+    (speaker: 'Speaker1' | 'Speaker2'): 'default' | 'serious' | 'angry' => {
+      if (currentIndex === -1) return 'default';
+
+      // 現在のインデックスから逆順に走査し、最初に見つかった該当スピーカーの感情を返す
+      for (let i = currentIndex; i >= 0; i--) {
+        const turn = turns[i];
+        if (turn && turn.speaker === speaker) {
+          return turn.emotion;
+        }
+      }
+      return 'default';
+    },
+    [currentIndex, turns]
+  );
+
   /** Speaker1の画像パスを取得する */
   const getSpeaker1Img = useCallback((): string => {
-    if (activeSpeaker === 'Speaker1') {
-      if (currentEmotion === 'serious') return CHARACTER_IMAGES.Speaker1.serious;
-      if (currentEmotion === 'angry') return CHARACTER_IMAGES.Speaker1.angry;
-    }
+    const emotion = getLatestEmotion('Speaker1');
+    if (emotion === 'serious') return CHARACTER_IMAGES.Speaker1.serious;
+    if (emotion === 'angry') return CHARACTER_IMAGES.Speaker1.angry;
     return CHARACTER_IMAGES.Speaker1.default;
-  }, [activeSpeaker, currentEmotion]);
+  }, [getLatestEmotion]);
 
   /** Speaker2の画像パスを取得する */
   const getSpeaker2Img = useCallback((): string => {
-    if (activeSpeaker === 'Speaker2') {
-      if (currentEmotion === 'serious') return CHARACTER_IMAGES.Speaker2.serious;
-      if (currentEmotion === 'angry') return CHARACTER_IMAGES.Speaker2.angry;
-    }
+    const emotion = getLatestEmotion('Speaker2');
+    if (emotion === 'serious') return CHARACTER_IMAGES.Speaker2.serious;
+    if (emotion === 'angry') return CHARACTER_IMAGES.Speaker2.angry;
     return CHARACTER_IMAGES.Speaker2.default;
-  }, [activeSpeaker, currentEmotion]);
+  }, [getLatestEmotion]);
 
   // =========================================================================
   // 返り値
