@@ -52,3 +52,12 @@ export interface BufferState {
   /** 表示用メッセージ */
   msg: string;
 }
+
+/** 討論履歴の保存用の型 */
+export interface HistoryItem {
+  id: string;        // 識別用のID (Date.now().toString())
+  topic: string;     // 討論議題
+  data: DebateData;  // 台本データ (Gemini JSON)
+  timestamp: number; // 保存された日時
+}
+
