@@ -63,13 +63,14 @@
 
 /* セリフテキスト */
 .dialogue-text {
-  font-size: 1.25rem;
+  font-size: 1.35rem; /* スマホ・PC共通で文字サイズを一定に維持 */
   color: var(--text-main);
   margin-top: 0.5rem;
-  line-height: 1.7;
+  line-height: 1.75;
   font-weight: 400;
   letter-spacing: 0.02em;
   text-shadow: 0px 1px 3px #121212;
+  word-break: break-all; /* 長い単語やURLがはみ出さないように折り返す */
 }
 
 /* フッター: 操作とメタ情報のグリッドレイアウト */
@@ -157,11 +158,82 @@
 @media (max-width: 768px) {
   .dialogue-box {
     padding: 1.8rem 5% 1.2rem 5%;
-    min-height: 200px;
+    min-height: 180px; /* スマホ画面の高さに配慮して少し縮小 */
   }
 
   .speaker-name-badge {
     left: 5%;
     padding: 0.4rem 1.5rem;
+  }
+}
+
+/* PC一般 (幅 1200px 以上) */
+@media (min-width: 1200px) {
+  .dialogue-text {
+    font-size: 1.75rem; /* 約28px */
+  }
+  .dialogue-box {
+    min-height: 260px;
+  }
+}
+
+/* 高解像度PC/1080p (幅 1920px 以上) */
+@media (min-width: 1920px) {
+  .dialogue-text {
+    font-size: 2.2rem; /* 約35px */
+  }
+  .dialogue-box {
+    min-height: 310px;
+  }
+  .speaker-name-badge {
+    font-size: 1.5rem;
+    top: -30px;
+  }
+  .close-debate-btn {
+    font-size: 1rem;
+    padding: 0.5rem 1.2rem;
+  }
+  .debate-topic-label {
+    font-size: 1.15rem;
+  }
+  .search-queries-tag {
+    font-size: 0.95rem;
+    padding: 0.3rem 0.8rem;
+  }
+}
+
+/* 4K大画面PC (幅 3840px 以上) */
+@media (min-width: 3840px) {
+  .dialogue-text {
+    font-size: 3.5rem; /* 約56px */
+    line-height: 1.8;
+  }
+  .dialogue-box {
+    min-height: 480px;
+    padding: 3.5rem 8% 3rem 8%;
+  }
+  .speaker-name-badge {
+    font-size: 2.5rem;
+    top: -50px;
+    border-radius: 20px;
+    padding: 0.8rem 4rem;
+  }
+  .dialogue-footer {
+    gap: 2.5rem;
+    margin-top: 3rem;
+    padding-top: 2rem;
+  }
+  .close-debate-btn {
+    font-size: 1.5rem;
+    padding: 0.8rem 1.8rem;
+    border-radius: 16px;
+  }
+  .debate-topic-label {
+    font-size: 1.8rem;
+  }
+  .search-queries-tag {
+    font-size: 1.5rem;
+    padding: 0.5rem 1.2rem;
+    border-radius: 40px;
   }
 }
