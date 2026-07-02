@@ -21,7 +21,7 @@
   border-bottom: none;
   border-radius: 24px 24px 0 0;
   padding: 2.2rem 8% 1.8rem 8%;
-  min-height: 230px;
+  min-height: 320px; /* 文字サイズ2倍化に伴い拡大 */
   position: relative;
   box-shadow: 0 -15px 40px rgba(0, 0, 0, 0.45);
   backdrop-filter: blur(3px);
@@ -63,10 +63,10 @@
 
 /* セリフテキスト */
 .dialogue-text {
-  font-size: 1.35rem; /* スマホ・PC共通で文字サイズを一定に維持 */
+  font-size: 2.7rem; /* スマホ・PC共通のデフォルト文字サイズ（旧: 1.35rem の2倍） */
   color: var(--text-main);
   margin-top: 0.5rem;
-  line-height: 1.75;
+  line-height: 1.5; /* 文字拡大に伴い行間をややタイトに調整 */
   font-weight: 400;
   letter-spacing: 0.02em;
   text-shadow: 0px 1px 3px #121212;
@@ -158,7 +158,7 @@
 @media (max-width: 768px) {
   .dialogue-box {
     padding: 1.8rem 5% 1.2rem 5%;
-    min-height: 180px; /* スマホ画面の高さに配慮して少し縮小 */
+    min-height: 280px; /* スマホ画面での文字2倍化に伴い高さを拡張 */
   }
 
   .speaker-name-badge {
@@ -170,20 +170,20 @@
 /* PC一般 (幅 1200px 以上) */
 @media (min-width: 1200px) {
   .dialogue-text {
-    font-size: 1.75rem; /* 約28px */
+    font-size: 3.5rem; /* 約56px（旧: 1.75rem の2倍） */
   }
   .dialogue-box {
-    min-height: 260px;
+    min-height: 360px;
   }
 }
 
 /* 高解像度PC/1080p (幅 1920px 以上) */
 @media (min-width: 1920px) {
   .dialogue-text {
-    font-size: 2.2rem; /* 約35px */
+    font-size: 4.4rem; /* 約70px（旧: 2.2rem の2倍） */
   }
   .dialogue-box {
-    min-height: 310px;
+    min-height: 450px;
   }
   .speaker-name-badge {
     font-size: 1.5rem;
@@ -205,12 +205,11 @@
 /* 4K大画面PC (幅 3840px 以上) */
 @media (min-width: 3840px) {
   .dialogue-text {
-    font-size: 3.5rem; /* 約56px */
-    line-height: 1.8;
+    font-size: 7.0rem; /* 約112px（旧: 3.5rem の2倍） */
+    line-height: 1.5;
   }
   .dialogue-box {
-    min-height: 480px;
-    padding: 3.5rem 8% 3rem 8%;
+    min-height: 680px;
   }
   .speaker-name-badge {
     font-size: 2.5rem;
