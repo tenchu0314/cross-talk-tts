@@ -4,6 +4,50 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
+/**
+ * セリフテキストを日本語の句点（。）、疑問符（？）、感嘆符（！）で分割し、
+ * 文末記号を残した状態で配列として返します。
+ */
+function splitTurnText(text: string): string[] {
+  if (!text) return [];
+  
+  // 句点・疑問符・感嘆符を区切り文字として、それらを含めて分割する
+  // キャプチャグループ () を使用することで、マッチした文字自体も配列に残す
+  const segments = text.split(/([。！？]+)/g);
+  const result: string[] = [];
+  let pendingPunctuation = '';
+  
+  for (let i = 0; i < segments.length; i += 2) {
+    let mainText = segments[i]?.trim();
+    const punctuation = segments[i + 1] || '';
+    
+    // 保留されていた記号があれば、今回の mainText の先頭に追加
+    if (pendingPunctuation && mainText) {
+      mainText = pendingPunctuation + mainText;
+      pendingPunctuation = '';
+    }
+    
+    if (mainText) {
+      result.push(mainText + punctuation);
+    } else if (punctuation) {
+      if (result.length > 0) {
+        // すでに文がある場合は、直前の文末に結合
+        result[result.length - 1] += punctuation;
+      } else {
+        // まだ文がない（先頭が記号）場合は保留し、次の文の頭に付ける
+        pendingPunctuation += punctuation;
+      }
+    }
+  }
+  
+  // ループ終了後に保留記号が残っている場合
+  if (pendingPunctuation) {
+    result.push(pendingPunctuation);
+  }
+  
+  return result.length > 0 ? result : [text];
+}
+
 const app = express();
 const PORT = process.env.PORT || 3001;
 const TTS_SERVER_URL = process.env.TTS_SERVER_URL || 'http://localhost:8088';
@@ -208,6 +252,30 @@ ${rawText}
     // Parse and merge search queries
     const debateData = JSON.parse(jsonText);
     debateData.search_queries = searchQueries;
+
+    // セリフを文ごとに分割
+    if (debateData.turns && Array.isArray(debateData.turns)) {
+      interface DebateTurn {
+        speaker: 'Speaker1' | 'Speaker2';
+        text: string;
+        emotion: 'default' | 'serious' | 'angry';
+      }
+      const originalTurns: DebateTurn[] = debateData.turns;
+      const splitTurns: DebateTurn[] = [];
+
+      for (const turn of originalTurns) {
+        if (!turn.text) continue;
+        const texts = splitTurnText(turn.text);
+        for (const t of texts) {
+          splitTurns.push({
+            speaker: turn.speaker,
+            text: t,
+            emotion: turn.emotion || 'default'
+          });
+        }
+      }
+      debateData.turns = splitTurns;
+    }
     
     console.log('Gemini Step 2 complete. Successfully structured debate script.');
     res.json(debateData);
